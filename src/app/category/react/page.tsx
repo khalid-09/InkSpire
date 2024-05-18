@@ -1,20 +1,20 @@
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import Link from 'next/link';
+} from "@/components/ui/card";
+import Link from "next/link";
 
 const CategoryReactPage = () => {
   return (
-    <div className="flex items-center md:gap-12 gap-8 md:flex-row flex-col p-4">
+    <div className="flex flex-col items-center gap-8 p-6 md:flex-row md:gap-12">
       <Card>
         <Link href="/react/use-deferred-value" className="group">
           <CardHeader>
-            <CardTitle className="text-xl transition group-hover:text-purple-700 dark:group-hover:text-cyan-400 font-bold">
+            <CardTitle className="text-xl font-bold transition group-hover:text-purple-700 dark:group-hover:text-cyan-400">
               Snappy UI Optimization with useDeferredValue
             </CardTitle>
           </CardHeader>
@@ -35,7 +35,7 @@ const CategoryReactPage = () => {
       <Card>
         <Link href="/react/use-deferred-value" className="group">
           <CardHeader>
-            <CardTitle className="text-xl transition group-hover:text-purple-700 dark:group-hover:text-cyan-400 font-bold">
+            <CardTitle className="text-xl font-bold transition group-hover:text-purple-700 dark:group-hover:text-cyan-400">
               Snappy UI Optimization with useDeferredValue
             </CardTitle>
           </CardHeader>

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,30 +8,30 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import Link from 'next/link';
+} from "@/components/ui/breadcrumb";
+import Link from "next/link";
 
 const Breadcrumbs = () => {
   const pathname = usePathname();
-  const categoryPathname = pathname.split('/').at(1);
+  const categoryPathname = pathname.split("/").at(1);
 
   let category = {
-    categoryLink: '',
-    categoryName: '',
+    categoryLink: "",
+    categoryName: "",
   };
 
-  if (categoryPathname === 'react') {
-    category.categoryLink = '/category/react';
-    category.categoryName = 'React';
-  } else if (categoryPathname === 'css') {
-    category.categoryLink = '/category/css';
-    category.categoryName = 'CSS';
-  } else if (categoryPathname === 'animations') {
-    category.categoryLink = '/category/animations';
-    category.categoryName = 'Animations';
+  if (categoryPathname === "react") {
+    category.categoryLink = "/category/react";
+    category.categoryName = "React";
+  } else if (categoryPathname === "css") {
+    category.categoryLink = "/category/css";
+    category.categoryName = "CSS";
+  } else if (categoryPathname === "animations") {
+    category.categoryLink = "/category/animations";
+    category.categoryName = "Animations";
   } else {
-    category.categoryLink = '/category/performance';
-    category.categoryName = 'Performance';
+    category.categoryLink = "/category/performance";
+    category.categoryName = "Performance";
   }
 
   return (

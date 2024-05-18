@@ -1,20 +1,20 @@
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { ArrowRightIcon, Link2Icon } from '@radix-ui/react-icons';
-import Link from 'next/link';
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ArrowRightIcon, Link2Icon } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 const HomePage = () => {
   return (
-    <section className="md:mt-72 mt-36 items-start flex md:flex-row flex-col px-4 gap-10">
+    <section className="mt-36 flex flex-col items-start gap-10 px-6 md:mt-72 md:flex-row">
       <div className="w-full md:w-2/3">
-        <h2 className="text-primary uppercase tracking-wider mb-10 text-2xl">
+        <h2 className="mb-10 text-2xl uppercase tracking-wider text-primary">
           Recently published
         </h2>
         <div className="space-y-10">
           <article className="relative">
             <Link href="/react/use-deferred-value" className="group space-y-4">
-              <Link2Icon className="group-hover:block hidden transition absolute top-1 -left-5" />
-              <h3 className="text-xl transition group-hover:text-purple-700 dark:group-hover:text-cyan-400 font-bold">
+              <Link2Icon className="absolute -left-5 top-1 hidden transition group-hover:block" />
+              <h3 className="text-xl font-bold transition group-hover:text-purple-700 dark:group-hover:text-cyan-400">
                 Snappy UI Optimization with useDeferredValue
               </h3>
               <p>
@@ -48,32 +48,32 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <div className="space-y-4 w-full md:w-1/3">
-        <h4 className="text-muted-foreground tracking-wide text-start uppercase mb-10 text-2xl">
+      <div className="w-full space-y-4 md:w-1/3">
+        <h4 className="mb-10 text-start text-2xl uppercase tracking-wide text-muted-foreground">
           Top categories
         </h4>
         <div className="flex flex-wrap gap-2">
           <Badge
             variant="secondary"
-            className="px-3 transition hover:scale-105 py-2 text-sm"
+            className="px-3 py-2 text-sm transition hover:scale-105"
           >
             <Link href="/category/react">React</Link>
           </Badge>
           <Badge
             variant="secondary"
-            className="px-3 transition hover:scale-105 py-2 text-sm"
+            className="px-3 py-2 text-sm transition hover:scale-105"
           >
             CSS
           </Badge>
           <Badge
             variant="secondary"
-            className="px-3 transition hover:scale-105 py-2 text-sm"
+            className="px-3 py-2 text-sm transition hover:scale-105"
           >
             Animations
           </Badge>
           <Badge
             variant="secondary"
-            className="px-3 transition hover:scale-105 py-2 text-sm"
+            className="px-3 py-2 text-sm transition hover:scale-105"
           >
             Perfromance
           </Badge>

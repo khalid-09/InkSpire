@@ -1,14 +1,14 @@
-import Breadcrumbs from '@/components/breadcrumbs';
-import { H1, H2, P } from '@/components/typography';
-import Link from 'next/link';
+import Breadcrumbs from "@/components/breadcrumbs";
+import { H1, H2, P } from "@/components/typography";
+import Link from "next/link";
 
 const ReactBlogPage = () => {
   return (
-    <section className="p-4 mt-20 ">
+    <section className="mt-20 p-6 ">
       <Breadcrumbs />
       <H1 className="mt-8">Snappy UI Optimization with useDeferredValues</H1>
-      <article className="flex md:flex-row flex-col items-start gap-20 mt-20">
-        <div className="text-lg space-y-8 w-full md:w-2/3">
+      <article className="mt-20 flex flex-col items-start gap-20 md:flex-row">
+        <div className="w-full space-y-8 text-lg md:w-2/3">
           <div id="introduction">
             <P>
               Over the years, React has given us a number of tools for
@@ -53,8 +53,8 @@ const ReactBlogPage = () => {
             </P>
           </div>
         </div>
-        <aside className="w-full md:w-1/3 md:block hidden">
-          <h4 className="text-xl uppercase tracking-wide mb-4">
+        <aside className="hidden w-full md:block md:w-1/3">
+          <h4 className="mb-4 text-xl uppercase tracking-wide">
             Table of contents
           </h4>
           <ul className="space-y-3">
