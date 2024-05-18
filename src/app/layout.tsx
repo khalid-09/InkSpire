@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Josefin_Sans } from 'next/font/google';
 import '@/styles/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
+import HeaderNav from '@/components/landing/header-nav';
 
 const josefin = Josefin_Sans({ subsets: ['latin'] });
 
@@ -27,7 +28,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <main className="max-w-5xl m-auto">
+            <HeaderNav />
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>

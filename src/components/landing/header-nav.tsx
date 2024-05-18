@@ -6,42 +6,11 @@ import { Button } from '../ui/button';
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
 } from '@/components/ui/navigation-menu';
-import { forwardRef } from 'react';
-import { cn } from '@/lib/utils';
-
-const components: { title: string; href: string }[] = [
-  {
-    title: 'Alert Dialog',
-    href: '/docs/primitives/alert-dialog',
-  },
-  {
-    title: 'Hover Card',
-    href: '/docs/primitives/hover-card',
-  },
-  {
-    title: 'Progress',
-    href: '/docs/primitives/progress',
-  },
-  {
-    title: 'Scroll-area',
-    href: '/docs/primitives/scroll-area',
-  },
-  {
-    title: 'Tabs',
-    href: '/docs/primitives/tabs',
-  },
-  {
-    title: 'Tooltip',
-    href: '/docs/primitives/tooltip',
-  },
-];
 
 const HeaderNav = () => {
   return (
@@ -93,36 +62,14 @@ const HeaderNav = () => {
           </NavigationMenu>
         </li>
       </ul>
-      <div className="flex md:flex-row items-end md:items-center flex-col-reverse gap-2">
+      <aside className="flex md:flex-row items-end md:items-center flex-col-reverse gap-2">
         <Button asChild>
           <Link href="/blog/new">Add Blog</Link>
         </Button>
         <ModeToggle />
-      </div>
+      </aside>
     </nav>
   );
 };
-
-interface ListItemProps {
-  href: string;
-  title: string;
-}
-
-const ListItem = ({ href, title }: ListItemProps) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <Link
-          href={href}
-          className={`
-            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground'`}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-        </Link>
-      </NavigationMenuLink>
-    </li>
-  );
-};
-ListItem.displayName = 'ListItem';
 
 export default HeaderNav;
