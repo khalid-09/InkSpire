@@ -1,10 +1,9 @@
-import { ModeToggle } from '@/components/theme-toggle';
+import HeaderNav from '@/components/landing/header-nav';
 
 const HomePage = () => {
   return (
-    <div className="text-center text-5xl">
-      Homepage
-      <ModeToggle />
+    <div className="max-w-5xl m-auto">
+      <HeaderNav />
     </div>
   );
 };
