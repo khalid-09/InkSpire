@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Josefin_Sans } from 'next/font/google';
 import '@/styles/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import HeaderNav from '@/components/landing/header-nav';
+import HeaderNav from '@/components/header-nav';
 
 const josefin = Josefin_Sans({ subsets: ['latin'] });
 

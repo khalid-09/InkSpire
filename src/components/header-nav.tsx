@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { ModeToggle } from '../theme-toggle';
-import { Button } from '../ui/button';
+import { ModeToggle } from './theme-toggle';
+import { Button } from './ui/button';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -58,7 +58,7 @@ const HeaderNav = () => {
           </NavigationMenu>
         </li>
       </ul>
-      <aside className="flex md:flex-row items-end md:items-center flex-col-reverse gap-2">
+      <aside className="flex md:flex-row items-end  md:items-center flex-col-reverse gap-2">
         <Button asChild>
           <Link href="/blog/new">Write a Blog</Link>
         </Button>
