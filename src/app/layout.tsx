@@ -3,6 +3,7 @@ import { Inter, Josefin_Sans } from "next/font/google";
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import HeaderNav from "@/components/header/header-nav";
+import { SparklesCore } from "@/components/ui/sparkles";
 
 const josefin = Josefin_Sans({ subsets: ["latin"] });
 
@@ -21,14 +22,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${josefin.className}`}>
+      <body
+        className={`${josefin.className} relative min-h-screen overflow-x-hidden`}
+      >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-          <main className="m-auto max-w-5xl">
+          <div className="absolute inset-0 -z-20 ">
+            <SparklesCore
+              id="tsparticlesfullpage"
+              background="transparent"
+              minSize={0.6}
+              maxSize={1.4}
+              particleDensity={100}
+              className="h-full w-full"
+              particleColor="#FFFFFF"
+            />
+          </div>
+          <main className="relative m-auto max-w-5xl">
             <HeaderNav />
             {children}
           </main>
