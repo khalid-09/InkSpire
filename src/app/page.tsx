@@ -5,9 +5,9 @@ import Link from "next/link";
 
 const HomePage = () => {
   return (
-    <section className="mt-36 flex flex-col items-start gap-10 px-6 md:mt-72 md:flex-row">
+    <section className="m-auto mt-10 flex max-w-6xl flex-col items-start gap-10   md:flex-row">
       <div className="w-full md:w-2/3">
-        <h2 className="mb-10 text-2xl uppercase tracking-wider text-primary">
+        <h2 className="mb-10 inline-block border-b-4 text-2xl uppercase tracking-wider text-primary">
           Recently published
         </h2>
         <div className="space-y-10">
