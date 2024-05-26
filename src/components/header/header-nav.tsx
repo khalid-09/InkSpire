@@ -47,43 +47,49 @@ const inter = Inter({ subsets: ["latin"] });
 
 const HeaderNav = () => {
   return (
-    <nav className="flex  items-center justify-between gap-4 py-6">
-      <div className="relative flex items-center gap-2 md:gap-4">
+    <nav className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-6">
+      <Link href="/">
         <ShadowNoneIcon className="h-8 w-9" />
-        <Input className="py-4 text-base md:px-8" placeholder="Search.." />
-        <MagnifyingGlassIcon className="absolute left-14 top-2 hidden h-5 w-5 md:block" />
-      </div>
-      <div className="flex items-center gap-2">
-        <Button className="" variant="outline" asChild>
-          <Link href="/login" className="flex items-center gap-1">
-            <FileTextIcon className={`h-4 w-4  ${inter.className}`} />{" "}
-            <span className="hidden text-base md:block">Write</span>
-          </Link>
-        </Button>
+      </Link>
+      <div className=" flex w-full max-w-6xl items-center justify-between gap-2 px-2">
+        <div className="relative flex items-center gap-2 md:gap-4">
+          <Input className="text-base md:px-7" placeholder="Search..." />
+          <MagnifyingGlassIcon className="absolute left-2 top-[9px] hidden h-4 w-4 text-sm md:block" />
+        </div>
         <div className="flex items-center gap-2">
-          <Button asChild size="icon" variant="outline">
-            <Link href="/">
-              <BellIcon />
+          {/* <Button className="" variant="outline" asChild>
+            <Link href="/login" className="flex items-center gap-1">
+              <FileTextIcon className={`h-4 w-4  ${inter.className}`} />{" "}
+              <span className="hidden text-base md:block">Write</span>
             </Link>
           </Button>
-          <Avatar>
+          <div className="flex items-center gap-2">
             <Button asChild size="icon" variant="outline">
               <Link href="/">
-                <AvatarImage className="" src="https://github.com/shadcn.png" />
+                <BellIcon />
               </Link>
             </Button>
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+            <Avatar>
+              <Button asChild size="icon" variant="outline">
+                <Link href="/">
+                  <AvatarImage
+                    className=""
+                    src="https://github.com/shadcn.png"
+                  />
+                </Link>
+              </Button>
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <ModeToggle />
+          </div> */}
           <ModeToggle />
-        </div>
-        {/* <div className="space-x-2">
           <Button variant="secondary" asChild>
             <Link href="/login">Log in</Link>
           </Button>
-          <Button variant="secondary" asChild>
+          <Button variant="default" asChild>
             <Link href="/signup">Sign up</Link>
           </Button>
-        </div> */}
+        </div>
       </div>
     </nav>
   );

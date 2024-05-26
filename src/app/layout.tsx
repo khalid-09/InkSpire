@@ -25,10 +25,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="container">
-            <HeaderNav />
-            {children}
-          </main>
+          <HeaderNav />
+          <main className="mx-auto max-w-6xl px-4">{children}</main>
         </ThemeProvider>
       </body>
     </html>
