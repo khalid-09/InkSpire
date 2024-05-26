@@ -1,4 +1,4 @@
-import LoginForm from "@/components/auth/login-form";
+import SignupForm from "@/components/auth/signup-form";
 import { H3 } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -8,8 +8,8 @@ const LoginPage = () => {
   return (
     <section className="mt-20 flex flex-row items-center justify-center ">
       <div className="w-full space-y-10 sm:w-2/3 md:w-[40%]">
-        <H3 className="text-center">Welcome Back</H3>
-        <LoginForm />
+        <H3 className="text-center">Join Us Today</H3>
+        <SignupForm />
         <div className="space-y-4">
           <Button
             variant="secondary"
@@ -19,11 +19,9 @@ const LoginPage = () => {
             <span className="text-base">Continue with Google</span>
           </Button>
           <div className="flex flex-wrap items-center justify-center">
-            <p className="text-muted-foreground">
-              Don&apos;t have an account ?
-            </p>
+            <p className="text-muted-foreground">Already a member ?</p>
             <Button variant="link" asChild>
-              <Link href="/signup">Join us today.</Link>
+              <Link href="/login">Log In here.</Link>
             </Button>
           </div>
         </div>
