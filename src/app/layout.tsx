@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
-import { Josefin_Sans } from "next/font/google";
+import { Josefin_Sans, Rubik } from "next/font/google";
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-const josefin = Josefin_Sans({ subsets: ["latin"] });
 import HeaderNav from "@/components/header/header-nav";
+import { Toaster } from "@/components/ui/sonner";
+
+const josefin = Josefin_Sans({ subsets: ["latin"] });
+const rubik = Rubik({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Blogify",
@@ -18,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${josefin.className}`}>
+      <body className={`${rubik.className}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -28,6 +31,7 @@ export default function RootLayout({
           <HeaderNav />
           <main className="mx-auto max-w-6xl px-4">{children}</main>
         </ThemeProvider>
+        <Toaster position="top-left" />
       </body>
     </html>
   );

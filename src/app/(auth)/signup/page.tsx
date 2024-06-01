@@ -1,9 +1,9 @@
 import AnimationWrapper from "@/components/animation-wrapper";
+import GoogleBtnForm from "@/components/auth/google-btn-form";
 import SignupForm from "@/components/auth/signup-form";
 import { H3 } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { FcGoogle } from "react-icons/fc";
 
 const LoginPage = () => {
   return (
@@ -18,13 +18,7 @@ const LoginPage = () => {
             <hr className="w-1/2  border-muted-foreground" />
           </div>
           <div className="flex flex-col items-center space-y-4">
-            <Button
-              variant="secondary"
-              className="w-[90%] space-x-3 rounded-full px-2 py-5"
-            >
-              <FcGoogle className="h-6 w-6" />
-              <span className="text-base">Continue with Google</span>
-            </Button>
+            <GoogleBtnForm />
             <div className="flex flex-wrap items-center justify-center">
               <p className="text-muted-foreground">Already a member ?</p>
               <Button variant="link" asChild>
