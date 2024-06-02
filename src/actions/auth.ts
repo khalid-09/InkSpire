@@ -3,6 +3,7 @@
 import { signIn } from "@/auth";
 import prisma from "@/db/db";
 import { getUserByEmail } from "@/lib/data/user";
+import { generateUsername } from "@/lib/utils";
 import {
   LoginSchema,
   SignupSchema,
@@ -39,6 +40,8 @@ export const loginUser = async (values: LoginSchema) => {
     }
     throw err;
   }
+
+  return { message: "Logged In!", type: "success" };
 };
 
 export const signupUser = async (values: SignupSchema) => {
@@ -56,11 +59,14 @@ export const signupUser = async (values: SignupSchema) => {
 
   if (existingUser) return { type: "error", message: "User already exists!" };
 
+  const username = await generateUsername(email);
+
   await prisma.user.create({
     data: {
       name,
       email,
       password: hashedPassword,
+      username,
     },
   });
 

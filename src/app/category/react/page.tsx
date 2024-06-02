@@ -7,6 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import prisma from "@/db/db";
+import { getUserById } from "@/lib/data/user";
+import { generateUsername } from "@/lib/utils";
+import { randomUUID } from "crypto";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -69,6 +73,11 @@ const CategoryReactPage = async () => {
         width={200}
         alt={session?.user?.name || ""}
       />
+      {
+        <pre>
+          {JSON.stringify(await getUserById(session?.user?.id!), null, 2)}
+        </pre>
+      }
     </div>
   );
 };
