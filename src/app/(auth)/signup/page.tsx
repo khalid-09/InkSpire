@@ -17,7 +17,7 @@ const LoginPage = () => {
             <span>or</span>
             <hr className="w-1/2  border-muted-foreground" />
           </div>
-          <div className="flex flex-col items-center space-y-4">
+          <div className="space-y-4">
             <GoogleBtnForm />
             <div className="flex flex-wrap items-center justify-center">
               <p className="text-muted-foreground">Already a member ?</p>

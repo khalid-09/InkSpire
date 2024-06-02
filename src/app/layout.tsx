@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
-import { Josefin_Sans, Rubik } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import HeaderNav from "@/components/header/header-nav";
 import { Toaster } from "@/components/ui/sonner";
 
-const josefin = Josefin_Sans({ subsets: ["latin"] });
-const rubik = Rubik({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Blogify",
+  title: "Ink-Spier",
   description:
-    "Blogify is a blog platform for developers to share their knowledge and experience.",
+    "Ink-Spire is a blog platform for developers to share their knowledge and experience.",
 };
 
 export default function RootLayout({
@@ -21,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${rubik.className}`}>
+      <body className={`${montserrat.className}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

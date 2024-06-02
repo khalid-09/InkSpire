@@ -12,6 +12,8 @@ import {
 import { Input } from "../ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Inter } from "next/font/google";
+import { auth } from "@/auth";
+import SignOutBtn from "../auth/sign-out-btn";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,7 +47,10 @@ const inter = Inter({ subsets: ["latin"] });
 //   );
 // };
 
-const HeaderNav = () => {
+const HeaderNav = async () => {
+  const session = await auth();
+  const user = session?.user;
+
   return (
     <nav className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-6">
       <Link href="/">
@@ -83,12 +88,18 @@ const HeaderNav = () => {
             <ModeToggle />
           </div> */}
           <ModeToggle />
-          <Button variant="secondary" asChild>
-            <Link href="/login">Log in</Link>
-          </Button>
-          <Button variant="default" asChild>
-            <Link href="/signup">Sign up</Link>
-          </Button>
+          {user ? (
+            <SignOutBtn />
+          ) : (
+            <>
+              <Button variant="secondary" asChild>
+                <Link href="/login">Log in</Link>
+              </Button>
+              <Button variant="default" asChild>
+                <Link href="/signup">Sign up</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </nav>

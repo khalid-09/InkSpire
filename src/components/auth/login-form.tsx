@@ -18,10 +18,15 @@ import {
   EyeOpenIcon,
   LockClosedIcon,
 } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { loginUser } from "@/actions/auth";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 const LoginForm = () => {
   const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -30,8 +35,16 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = (data: LoginSchema) => {
-    console.log(data);
+  const onSubmit = async (data: LoginSchema) => {
+    startTransition(() =>
+      loginUser(data).then((data) => {
+        if (data.type === "error") {
+          toast.error(data.message);
+          return;
+        }
+        toast.success(data.message);
+      }),
+    );
     form.reset();
   };
 
@@ -49,6 +62,7 @@ const LoginForm = () => {
                     <Input
                       className=" bg-secondary px-10 py-6 text-base dark:bg-background"
                       placeholder="Email"
+                      disabled={isPending}
                       {...field}
                     />
                     <EnvelopeClosedIcon className="absolute left-3 top-[13px] h-5 w-5" />
@@ -68,6 +82,7 @@ const LoginForm = () => {
                     <Input
                       type={open ? "text" : "password"}
                       className="bg-secondary px-10 py-6 text-base dark:bg-background"
+                      disabled={isPending}
                       placeholder="Password"
                       {...field}
                     />
@@ -93,7 +108,8 @@ const LoginForm = () => {
           />
         </div>
         <div className=" flex items-center justify-center">
-          <Button className="rounded-full" type="submit">
+          <Button disabled={isPending} className="rounded-full" type="submit">
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Log In
           </Button>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignupSchema, signupSchema } from "@/lib/validation/auth";
@@ -22,21 +22,34 @@ import {
   LockOpen1Icon,
 } from "@radix-ui/react-icons";
 import { FaUser } from "react-icons/fa6";
+import { loginUser, signupUser } from "@/actions/auth";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 const SignupForm = () => {
   const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<SignupSchema>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
-      fullName: "",
+      name: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
   });
 
-  const onSubmit = (data: SignupSchema) => {
-    console.log(data);
+  const onSubmit = async (data: SignupSchema) => {
+    startTransition(() =>
+      signupUser(data).then((data) => {
+        if (data.type === "error") {
+          toast.error(data.message);
+          return;
+        }
+        toast.success(data.message);
+      }),
+    );
     form.reset();
   };
 
@@ -46,7 +59,7 @@ const SignupForm = () => {
         <div className="space-y-3">
           <FormField
             control={form.control}
-            name="fullName"
+            name="name"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -54,6 +67,7 @@ const SignupForm = () => {
                     <Input
                       className=" bg-secondary px-10 py-6 text-base dark:bg-background"
                       placeholder="Full Name"
+                      disabled={isPending}
                       {...field}
                     />
                     <FaUser className="absolute left-3 top-[13px] h-5 w-5" />
@@ -73,6 +87,7 @@ const SignupForm = () => {
                     <Input
                       className=" bg-secondary px-10 py-6 text-base dark:bg-background"
                       placeholder="Email"
+                      disabled={isPending}
                       {...field}
                     />
                     <EnvelopeClosedIcon className="absolute left-3 top-[13px] h-5 w-5" />
@@ -93,6 +108,7 @@ const SignupForm = () => {
                       type={open ? "text" : "password"}
                       className="bg-secondary px-10 py-6 text-base dark:bg-background"
                       placeholder="Password"
+                      disabled={isPending}
                       {...field}
                     />
                     <LockOpen1Icon className="absolute left-3 top-[13px] h-5 w-5" />
@@ -126,6 +142,7 @@ const SignupForm = () => {
                       type={open ? "text" : "password"}
                       className="bg-secondary px-10 py-6 text-base dark:bg-background"
                       placeholder="Confirm Password"
+                      disabled={isPending}
                       {...field}
                     />
                     <LockClosedIcon className="absolute left-3 top-[13px] h-5 w-5" />
@@ -137,7 +154,8 @@ const SignupForm = () => {
           />
         </div>
         <div className=" flex items-center justify-center">
-          <Button className="rounded-full" type="submit">
+          <Button disabled={isPending} className="rounded-full" type="submit">
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign Up
           </Button>
         </div>

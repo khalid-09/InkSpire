@@ -13,7 +13,7 @@ export type LoginSchema = z.infer<typeof loginSchema>;
 
 export const signupSchema = z
   .object({
-    fullName: z
+    name: z
       .string({ required_error: "Full name is required" })
       .min(3, { message: "Full name must be at least 3 characters" }),
     email: z

@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,11 +7,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-const CategoryReactPage = () => {
+const CategoryReactPage = async () => {
+  const session = await auth();
+  // const user = session?.user;
+
+  // if (!user) {
+  //   redirect("/login");
+  // }
+
   return (
-    <div className="flex flex-col items-center gap-8 p-6 md:flex-row md:gap-12">
+    <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
       <Card>
         <Link href="/react/use-deferred-value" className="group">
           <CardHeader>
@@ -53,6 +63,12 @@ const CategoryReactPage = () => {
           </CardFooter>
         </Link>
       </Card>
+      <Image
+        src={session?.user?.image || ""}
+        height={200}
+        width={200}
+        alt={session?.user?.name || ""}
+      />
     </div>
   );
 };
