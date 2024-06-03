@@ -19,6 +19,7 @@ import { auth } from "@/auth";
 import Link from "next/link";
 import { getUserById } from "@/lib/data/user";
 import SignOutBtn from "../auth/sign-out-btn";
+import AnimationWrapper from "../animation-wrapper";
 
 const UserDropdown = async () => {
   const session = await auth();
@@ -40,27 +41,45 @@ const UserDropdown = async () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/profile">Profile</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/dashboard">Dashboard</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/settings">Settings</Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex flex-col items-start gap-2">
-          <Button>
+        <AnimationWrapper>
+          {" "}
+          <DropdownMenuLabel className="cursor-pointer">
+            My Account
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="block cursor-pointer text-base font-medium md:hidden"
+            asChild
+          >
+            <Link href={`/blog/new`}>Write</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer text-base font-medium"
+            asChild
+          >
+            <Link href={`/user/${user?.username}`}>Profile</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer text-base font-medium"
+            asChild
+          >
+            <Link href="/dashboard/blogs">Dashboard</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer text-base font-medium"
+            asChild
+          >
+            <Link href="/settings/edit-profile">Settings</Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="flex cursor-pointer flex-col items-start gap-2 text-base font-medium">
             <SignOutBtn />
-          </Button>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <span>@{user?.username}</span>
-        </DropdownMenuItem>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <span className="font-semibold">@{user?.username}</span>
+          </DropdownMenuItem>
+        </AnimationWrapper>
       </DropdownMenuContent>
     </DropdownMenu>
   );
