@@ -14,38 +14,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Inter } from "next/font/google";
 import { auth } from "@/auth";
 import SignOutBtn from "../auth/sign-out-btn";
+import Image from "next/image";
+import UserDropdown from "./user-dropdown";
 
 const inter = Inter({ subsets: ["latin"] });
-
-// const HeaderNav = () => {
-//   return (
-//     <nav className="z-50 flex flex-row items-start justify-between gap-12 px-6 py-6 md:items-center ">
-//       <div className="hidden flex-col items-start gap-3 md:flex md:flex-row md:items-center md:gap-6">
-//         <ul className="flex items-center gap-6">
-//           <li>
-//             <Link href="/">Home</Link>
-//           </li>
-//           <li>
-//             <Link href="/blog">Blogs</Link>
-//           </li>
-//           <li>
-//             <Categories />
-//           </li>
-//         </ul>
-//         <Button asChild>
-//           <Link href="/login">Write a Blog</Link>
-//         </Button>
-//       </div>
-//       <div className="block md:hidden">
-//         <Categories />
-//       </div>
-//       <div className="flex flex-row-reverse gap-2">
-//         <MobileNav />
-//         <ModeToggle />
-//       </div>
-//     </nav>
-//   );
-// };
 
 const HeaderNav = async () => {
   const session = await auth();
@@ -62,34 +34,23 @@ const HeaderNav = async () => {
           <MagnifyingGlassIcon className="absolute left-2 top-[9px] hidden h-4 w-4 text-sm md:block" />
         </div>
         <div className="flex items-center gap-2">
-          {/* <Button className="" variant="outline" asChild>
-            <Link href="/login" className="flex items-center gap-1">
-              <FileTextIcon className={`h-4 w-4  ${inter.className}`} />{" "}
-              <span className="hidden text-base md:block">Write</span>
-            </Link>
-          </Button>
-          <div className="flex items-center gap-2">
-            <Button asChild size="icon" variant="outline">
-              <Link href="/">
-                <BellIcon />
-              </Link>
-            </Button>
-            <Avatar>
-              <Button asChild size="icon" variant="outline">
-                <Link href="/">
-                  <AvatarImage
-                    className=""
-                    src="https://github.com/shadcn.png"
-                  />
+          {user ? (
+            <>
+              <Button className="bg-muted" variant="outline" asChild>
+                <Link href="/login" className="flex items-center gap-1">
+                  <FileTextIcon className={`h-4 w-4  ${inter.className}`} />{" "}
+                  <span className="hidden text-base md:block">Write</span>
                 </Link>
               </Button>
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-            <ModeToggle />
-          </div> */}
-          <ModeToggle />
-          {user ? (
-            <SignOutBtn />
+              <div className="flex items-center gap-2">
+                <Button asChild size="icon" variant="outline">
+                  <Link href="/">
+                    <BellIcon />
+                  </Link>
+                </Button>
+                <UserDropdown />
+              </div>
+            </>
           ) : (
             <>
               <Button variant="secondary" asChild>
@@ -100,6 +61,7 @@ const HeaderNav = async () => {
               </Button>
             </>
           )}
+          <ModeToggle />
         </div>
       </div>
     </nav>

@@ -7,7 +7,7 @@ const HomePage = () => {
   return (
     <section className=" mt-10 flex flex-col items-start gap-10   md:flex-row">
       <div className="w-full md:w-2/3">
-        <h2 className="mb-10 inline-block border-b-4 text-2xl uppercase tracking-wider text-primary">
+        <h2 className="mb-10 inline-block border-b-4 text-2xl font-bold uppercase tracking-wider text-primary">
           Recently published
         </h2>
         <div className="space-y-10">

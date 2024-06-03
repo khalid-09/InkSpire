@@ -7,21 +7,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import prisma from "@/db/db";
 import { getUserById } from "@/lib/data/user";
-import { generateUsername } from "@/lib/utils";
-import { randomUUID } from "crypto";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const CategoryReactPage = async () => {
   const session = await auth();
-  // const user = session?.user;
+  const user = session?.user;
 
-  // if (!user) {
-  //   redirect("/login");
-  // }
+  if (!user) {
+    redirect("/login");
+  }
 
   return (
     <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
@@ -67,12 +64,7 @@ const CategoryReactPage = async () => {
           </CardFooter>
         </Link>
       </Card>
-      <Image
-        src={session?.user?.image || ""}
-        height={200}
-        width={200}
-        alt={session?.user?.name || ""}
-      />
+
       {
         <pre>
           {JSON.stringify(await getUserById(session?.user?.id!), null, 2)}
