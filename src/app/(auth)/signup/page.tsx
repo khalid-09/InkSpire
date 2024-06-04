@@ -3,7 +3,13 @@ import GoogleBtnForm from "@/components/auth/google-btn-form";
 import SignupForm from "@/components/auth/signup-form";
 import { H3 } from "@/components/typography";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Signup",
+  description: "Signup by creating a new InkSpire Account",
+};
 
 const LoginPage = () => {
   return (

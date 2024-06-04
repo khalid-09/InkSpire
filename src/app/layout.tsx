@@ -8,7 +8,10 @@ import { Toaster } from "@/components/ui/sonner";
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Ink-Spier",
+  title: {
+    template: "%s | InkSpire",
+    default: "InkSpire",
+  },
   description:
     "Ink-Spire is a blog platform for developers to share their knowledge and experience.",
 };

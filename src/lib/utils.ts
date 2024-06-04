@@ -2,6 +2,7 @@ import prisma from "@/db/db";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { nanoid } from "nanoid";
+import { auth } from "@/auth";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,4 +15,10 @@ export const generateUsername = async (email: string) => {
     return (username += nanoid(5));
   }
   return username;
+};
+
+export const getSessionUser = async () => {
+  const session = await auth();
+  const user = session?.user;
+  return user;
 };

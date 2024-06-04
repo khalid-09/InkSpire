@@ -26,8 +26,6 @@ const UserDropdown = async () => {
   const id = session?.user?.id;
   const user = await getUserById(id!);
 
-  console.log(user);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>

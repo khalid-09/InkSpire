@@ -8,11 +8,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   events: {
     async linkAccount({ user }) {
+      const username = await generateUsername(user.email!);
       await prisma.user.update({
         where: { id: user.id },
         data: {
           emailVerified: new Date(),
-          username: await generateUsername(user.email!),
+          username,
         },
       });
     },

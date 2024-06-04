@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,13 +7,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { getUserById } from "@/lib/data/user";
-import Image from "next/image";
+import { getSessionUser } from "@/lib/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const CategoryReactPage = async () => {
-  const session = await auth();
-  const user = session?.user;
+  const user = await getSessionUser();
 
   if (!user) {
     redirect("/login");
@@ -65,11 +63,7 @@ const CategoryReactPage = async () => {
         </Link>
       </Card>
 
-      {
-        <pre>
-          {JSON.stringify(await getUserById(session?.user?.id!), null, 2)}
-        </pre>
-      }
+      {<pre>{JSON.stringify(await getUserById(user?.id!), null, 2)}</pre>}
     </div>
   );
 };
