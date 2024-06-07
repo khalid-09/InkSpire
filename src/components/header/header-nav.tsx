@@ -40,28 +40,12 @@ const HeaderNav = async () => {
             {user ? (
               <>
                 <div className="hidden md:block">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button className="bg-muted" variant="outline" asChild>
-                          <Link
-                            href="/blog/new"
-                            className="flex items-center gap-1"
-                          >
-                            <TfiPencilAlt
-                              className={`h-4 w-4  ${inter.className}`}
-                            />
-                            <span className="hidden text-base md:block">
-                              Write
-                            </span>
-                          </Link>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent side="bottom" align="center">
-                        Write a new blog post
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                  <Button className="bg-muted" variant="outline" asChild>
+                    <Link href="/blog/new" className="flex items-center gap-1">
+                      <TfiPencilAlt className={`h-4 w-4  ${inter.className}`} />
+                      <span className="hidden text-base md:block">Write</span>
+                    </Link>
+                  </Button>
                 </div>
                 <TooltipProvider>
                   <Tooltip>
