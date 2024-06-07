@@ -20,12 +20,14 @@ const BannerImage = ({ image, setImage }: BannerImageProps) => {
             alt="Blog-Banner-Image"
             fill
             className="absolute object-cover"
+            sizes="100vw"
           />
           {!image.includes("utfs.io") && (
             <div className="absolute bottom-0 right-0 mr-10 flex h-[20%] w-[20%] items-center justify-center md:mr-0">
               <UploadButton
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
+                  console.log(res);
                   console.log("Files: ", res.at(0)?.url);
                   setImage(res.at(0)?.url!);
                   toast.success("Banner Image Updated!");
