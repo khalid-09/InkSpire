@@ -27,8 +27,6 @@ const BannerImage = ({ image, setImage }: BannerImageProps) => {
               <UploadButton
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
-                  console.log(res);
-                  console.log("Files: ", res.at(0)?.url);
                   setImage(res.at(0)?.url!);
                   toast.success("Banner Image Updated!");
                 }}

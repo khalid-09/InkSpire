@@ -20,12 +20,16 @@ model User {
   emailVerified DateTime?
   password      String?
   image         String?
-  accounts      Account[]
-  sessions      Session[]
   username      String?   @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+
+  blogPosts BlogPosts[]
+  comments  Comments[]
 
   @@map("users")
 }
@@ -74,4 +78,60 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+model BlogPosts {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  authorId String @db.ObjectId
+
+  title       String
+  bannerImage String
+  description String
+  tags        String[]
+  draft       Boolean  @default(false)
+
+  author User? @relation(fields: [authorId], references: [id])
+
+  activity       Activity[]
+  comments       Comments[] @relation("BlogComments")
+  commentsAuthor Comments[] @relation("BlogAuthorComments")
+
+  @@map("blog_posts")
+}
+
+model Activity {
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  blogPostId String? @db.ObjectId
+
+  totalLikes          Int @default(0)
+  totalComments       Int @default(0)
+  totalReads          Int @default(0)
+  totalParentComments Int @default(0)
+
+  blogPost BlogPosts? @relation(fields: [blogPostId], references: [id])
+
+  @@map("activity")
+}
+
+model Comments {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  blogId       String    @db.ObjectId
+  blog         BlogPosts @relation("BlogComments", fields: [blogId], references: [id])
+  blogAuthorId String    @db.ObjectId
+  blogAuthor   BlogPosts @relation("BlogAuthorComments", fields: [blogAuthorId], references: [id])
+
+  comment String
+
+  children Comments[] @relation("CommentChildren")
+
+  commentedById String @db.ObjectId
+  commentedBy   User   @relation(fields: [commentedById], references: [id])
+
+  isReply Boolean?
+
+  parentId String?   @db.ObjectId
+  parent   Comments? @relation("CommentChildren", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  commentedAt DateTime @default(now())
 }
