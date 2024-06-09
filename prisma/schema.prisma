@@ -30,6 +30,7 @@ model User {
 
   blogPosts BlogPosts[]
   comments  Comments[]
+  // notifications Notifications[] @relation("UserNotifications")
 
   @@map("users")
 }
@@ -70,16 +71,6 @@ model Session {
   @@map("sessions")
 }
 
-model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@unique([identifier, token])
-  @@map("verification_tokens")
-}
-
 model BlogPosts {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   authorId String @db.ObjectId
@@ -95,6 +86,7 @@ model BlogPosts {
   activity       Activity[]
   comments       Comments[] @relation("BlogComments")
   commentsAuthor Comments[] @relation("BlogAuthorComments")
+  // notifications  Notifications[] @relation("BlogNotifications")
 
   @@map("blog_posts")
 }
@@ -134,4 +126,27 @@ model Comments {
   parent   Comments? @relation("CommentChildren", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   commentedAt DateTime @default(now())
+
+  @@map("comments")
 }
+
+// enum NotificationType {
+//   LIKE
+//   COMMENT
+//   REPLY
+// }
+
+// model Notifications {
+//   id   String           @id @default(auto()) @map("_id") @db.ObjectId
+//   type NotificationType
+//   seen Boolean          @default(false)
+
+//   blogId String    @db.ObjectId
+//   blog   BlogPosts @relation("BlogNotifications", fields: [blogId], references: [id])
+
+//   notificationForUserId String @db.ObjectId
+//   notificationFor       User   @relation("UserNotifications", fields: [notificationForUserId], references: [id])
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }

@@ -4,10 +4,9 @@ import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
-import { Block, BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { uploadFiles } from "@/lib/uploadthing";
-import { Button } from "../ui/button";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface RichTextEditorProps {
   initialContent?: string;
@@ -30,9 +29,9 @@ const RichTextEditor = ({ initialContent, setBlocks }: RichTextEditorProps) => {
       <BlockNoteView
         theme="dark"
         className="h-full py-3"
-        onChange={() =>
-          setBlocks(JSON.stringify(JSON.stringify(editor.document)))
-        }
+        onChange={async () => {
+          setBlocks(JSON.stringify(JSON.stringify(editor.document)));
+        }}
         editor={editor}
       />
     </section>
