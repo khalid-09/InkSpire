@@ -6,7 +6,8 @@ import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
 import { uploadFiles } from "@/lib/uploadthing";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
+import { useTheme } from "next-themes";
 
 interface RichTextEditorProps {
   initialContent?: string;
@@ -14,6 +15,8 @@ interface RichTextEditorProps {
 }
 
 const RichTextEditor = ({ initialContent, setBlocks }: RichTextEditorProps) => {
+  const { resolvedTheme } = useTheme();
+
   const editor: BlockNoteEditor = useCreateBlockNote({
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
@@ -25,16 +28,16 @@ const RichTextEditor = ({ initialContent, setBlocks }: RichTextEditorProps) => {
   });
 
   return (
-    <section>
+    <div className="h-[500px]">
       <BlockNoteView
-        theme="dark"
-        className="h-full py-3"
+        theme={resolvedTheme === "dark" ? "dark" : "light"}
         onChange={async () => {
           setBlocks(JSON.stringify(JSON.stringify(editor.document)));
         }}
         editor={editor}
+        editable={false}
       />
-    </section>
+    </div>
   );
 };
 

@@ -11,7 +11,7 @@ interface BannerImageProps {
 const BannerImage = ({ image, setImage }: BannerImageProps) => {
   return (
     <div
-      className={`relative h-80  w-full overflow-hidden rounded-lg border-b border-t ${!image ? "hidden" : ""}`}
+      className={`relative h-80  w-full overflow-hidden rounded-md border-b border-t ${!image ? "hidden" : ""}`}
     >
       {image && (
         <>
@@ -28,7 +28,7 @@ const BannerImage = ({ image, setImage }: BannerImageProps) => {
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
                   setImage(res.at(0)?.url!);
-                  toast.success("Banner Image Updated!");
+                  toast.info("Updating Banner Image!");
                 }}
                 onUploadError={(error: Error) => {
                   toast.error(error.message);
