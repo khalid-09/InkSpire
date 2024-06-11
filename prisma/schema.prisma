@@ -21,15 +21,20 @@ model User {
   password      String?
   image         String?
   username      String?   @unique
+  bio           String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  totalPosts Int? @default(0)
+  totalReads Int? @default(0)
+
   accounts Account[]
   sessions Session[]
 
-  blogPosts BlogPosts[]
-  comments  Comments[]
+  socialLinks SocialLinks[]
+  blogPosts   BlogPosts[]
+  comments    Comments[]
   // notifications Notifications[] @relation("UserNotifications")
 
   @@map("users")
@@ -71,13 +76,27 @@ model Session {
   @@map("sessions")
 }
 
+model SocialLinks {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  youtube   String? @default("")
+  instagram String? @default("")
+  facebook  String? @default("")
+  twitter   String? @default("")
+  github    String? @default("")
+  website   String? @default("")
+
+  userSocialLinkId String @db.ObjectId
+  belongsToUser    User   @relation(fields: [userSocialLinkId], references: [id])
+}
+
 model BlogPosts {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  authorId String @db.ObjectId
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  authorId String? @db.ObjectId
 
   title       String
+  content     String
   bannerImage String
-  description String
+  description String   @default("")
   tags        String[]
   draft       Boolean  @default(false)
 

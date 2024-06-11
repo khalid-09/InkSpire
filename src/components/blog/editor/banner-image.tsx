@@ -1,3 +1,4 @@
+import { useBlog } from "@/context/blog-context";
 import { UploadButton } from "@/lib/uploadthing";
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
@@ -8,7 +9,13 @@ interface BannerImageProps {
   setImage: Dispatch<SetStateAction<string>>;
 }
 
-const BannerImage = ({ image, setImage }: BannerImageProps) => {
+const BannerImage = () => {
+  const {
+    blog: { image },
+    blog,
+    setBlog,
+  } = useBlog();
+
   return (
     <div
       className={`relative h-80  w-full overflow-hidden rounded-md border-b border-t ${!image ? "hidden" : ""}`}
@@ -27,8 +34,19 @@ const BannerImage = ({ image, setImage }: BannerImageProps) => {
               <UploadButton
                 endpoint="imageUploader"
                 onClientUploadComplete={(res) => {
-                  setImage(res.at(0)?.url!);
-                  toast.info("Updating Banner Image!");
+                  setBlog({ ...blog, image: res.at(0)?.url! });
+                  const promise = () =>
+                    new Promise((resolve) =>
+                      setTimeout(() => resolve({}), 3000),
+                    );
+
+                  toast.promise(promise, {
+                    loading: "Uploading Image...",
+                    success: (data) => {
+                      return `Image has been added!`;
+                    },
+                    error: "Error",
+                  });
                 }}
                 onUploadError={(error: Error) => {
                   toast.error(error.message);

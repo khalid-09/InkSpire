@@ -1,25 +1,28 @@
 "use client";
 
+import { useBlog } from "@/context/blog-context";
+import { useTheme } from "next-themes";
+
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
+
 import { uploadFiles } from "@/lib/uploadthing";
-import { Dispatch, SetStateAction } from "react";
-import { useTheme } from "next-themes";
 
 interface RichTextEditorProps {
-  initialContent?: string;
-  setBlocks: Dispatch<SetStateAction<string>>;
+  editable: boolean;
+  content?: string;
 }
 
-const RichTextEditor = ({ initialContent, setBlocks }: RichTextEditorProps) => {
+const RichTextEditor = ({ content, editable }: RichTextEditorProps) => {
   const { resolvedTheme } = useTheme();
+  const { setBlog } = useBlog();
 
   const editor: BlockNoteEditor = useCreateBlockNote({
-    initialContent: initialContent
-      ? (JSON.parse(initialContent) as PartialBlock[])
+    initialContent: content
+      ? (JSON.parse(content) as PartialBlock[])
       : undefined,
     uploadFile: async (file: File) => {
       const [res] = await uploadFiles("imageUploader", { files: [file] });
@@ -28,14 +31,18 @@ const RichTextEditor = ({ initialContent, setBlocks }: RichTextEditorProps) => {
   });
 
   return (
-    <div className="h-[500px]">
+    <div className="">
       <BlockNoteView
         theme={resolvedTheme === "dark" ? "dark" : "light"}
         onChange={async () => {
-          setBlocks(JSON.stringify(JSON.stringify(editor.document)));
+          setBlog((blog) => ({
+            ...blog,
+            blocks: JSON.stringify(editor.document, null, 2),
+          }));
         }}
+        className=""
         editor={editor}
-        editable={false}
+        editable={editable}
       />
     </div>
   );
