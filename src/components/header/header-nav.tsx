@@ -3,7 +3,6 @@ import { ModeToggle } from "../theme-toggle";
 import { Button } from "../ui/button";
 import {
   BellIcon,
-  FileTextIcon,
   MagnifyingGlassIcon,
   ShadowNoneIcon,
 } from "@radix-ui/react-icons";

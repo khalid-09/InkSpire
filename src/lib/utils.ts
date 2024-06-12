@@ -3,6 +3,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { nanoid } from "nanoid";
 import { auth } from "@/auth";
+import { format } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -21,4 +22,11 @@ export const getSessionUser = async () => {
   const session = await auth();
   const user = session?.user;
   return user;
+};
+
+export const convertDate = (
+  dateString: Date,
+  formatString: string = "dd MMMM",
+): string => {
+  return format(new Date(dateString), formatString);
 };

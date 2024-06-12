@@ -1,59 +1,60 @@
-import { H3, P } from "@/components/typography";
-import { Badge } from "@/components/ui/badge";
 import prisma from "@/db/db";
-import { getSessionUser } from "@/lib/utils";
-import { BlogPosts } from "@prisma/client";
-import Image from "next/image";
+import { BlogPosts, User } from "@prisma/client";
 import Link from "next/link";
+import Image from "next/image";
+
+import { Badge } from "@/components/ui/badge";
+import { H3, P } from "@/components/typography";
 import { GoHeart } from "react-icons/go";
+import { convertDate } from "@/lib/utils";
 
 interface ReadBlogProps {
   blog: BlogPosts;
 }
 
-const ReadBlog = async ({ blog }: ReadBlogProps) => {
-  const user = await prisma.user.findUnique({
+const ReadBlog = async ({
+  blog: { authorId, title, description, bannerImage, tags, id, createdAt },
+}: ReadBlogProps) => {
+  const user = (await prisma.user.findUnique({
     where: {
-      id: blog.authorId!,
+      id: authorId!,
     },
-  });
+  })) as User;
 
   return (
     <Link
-      href={`/blog/${blog.title}`}
+      href={`/blog/${encodeURIComponent(id)}`}
       className="group flex justify-between gap-4 py-4"
     >
       <div className="w-full">
         <div className="mb-2 flex w-full items-center gap-3">
           <div className="relative h-8 w-8 overflow-hidden rounded-full">
             <Image
-              src={user?.image! || "/vercel.svg"}
+              src={user.image! || "/vercel.svg"}
               fill
-              alt={user?.name!}
-              className="absolute"
+              alt={user.name!}
+              className="absolute object-cover"
             />
           </div>
-          <p className="text-sm">{user?.username || "tet"}</p>
-          <p className="text-sm">@</p>
+          <p className="text-sm">{user.username}</p>
+          <p className="text-sm">@ {convertDate(createdAt)}</p>
         </div>
         <div className="space-y-3">
           <div className="space-y-2">
-            <H3 className="transition group-hover:text-primary">
-              {blog.title}
-            </H3>
-            <P className="[&:not(:first-child)]:mt-0">{blog.description}</P>
+            <H3 className="transition group-hover:text-primary">{title}</H3>
+            <P className="[&:not(:first-child)]:mt-0">{description}</P>
           </div>
           <div className="flex items-center gap-3">
-            <Badge>{blog.tags.at(0)}</Badge>
+            <Badge>{tags.at(0)}</Badge>
             <GoHeart className="h-5 w-5" />
           </div>
         </div>
       </div>
       <div className="relative h-40 w-44 overflow-hidden rounded-md">
         <Image
-          src={blog.bannerImage}
+          src={bannerImage}
           fill
-          alt={blog.title}
+          alt={title}
           className="absolute object-cover"
         />
       </div>
