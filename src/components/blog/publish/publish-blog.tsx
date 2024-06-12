@@ -56,7 +56,7 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
   };
 
   const handlePublish = (blog: BlogSchema) => {
-    console.log(blog);
+    // TODO : VALIDATE ALL THE FIELDS
     startTransition(async () => {
       try {
         const respnse = await createBlog(blog);
@@ -82,7 +82,7 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
         <Cross1Icon className="h-6 w-6 cursor-pointer" onClick={handleClose} />
       </div>
       <div className="flex flex-col gap-4 md:flex-row">
-        <section className=" w-full space-y-4 md:w-3/5">
+        <section className="flex w-full flex-1 flex-col space-y-4 md:w-3/5">
           <div className="relative h-96 overflow-hidden rounded-md">
             <Image
               src={image}
@@ -92,7 +92,7 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
               sizes="(min-width: 808px) 50vw, 100vw"
             />
           </div>
-          <Card>
+          <Card className="flex flex-grow flex-col">
             <CardHeader>
               <CardTitle className="text-xl">{title}</CardTitle>
               <CardDescription>
@@ -101,8 +101,8 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
             </CardHeader>
           </Card>
         </section>
-        <section className="w-full md:w-2/5 ">
-          <Card className="space-y-4">
+        <section className="flex w-full flex-1 flex-col md:w-2/5">
+          <Card className="flex flex-grow flex-col">
             <CardHeader>
               <Label className="mb-2 text-base">Blog Title</Label>
               <CardTitle>
@@ -143,7 +143,7 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
               <div className="relative mt-2 rounded-sm bg-muted px-3 py-3">
                 <Input
                   disabled={isPending}
-                  className=" mb-2 bg-background px-2 py-6 text-base"
+                  className="mb-2 bg-background px-2 py-6 text-base"
                   value={newTag}
                   onChange={(e) => setNewTag(e.target.value)}
                 />
@@ -174,7 +174,6 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
                   disabled={isPending}
                   onClick={() => handlePublish(blog)}
                 >
-                  {" "}
                   {isPending && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
@@ -185,6 +184,7 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
           </Card>
         </section>
       </div>
+
       <div className="mt-3 w-full">
         <RichTextEditor editable={false} content={blocks} />
       </div>
