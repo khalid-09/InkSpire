@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { H3, P } from "@/components/typography";
 import { GoHeart } from "react-icons/go";
 import { convertDate } from "@/lib/utils";
+import { getUserById } from "@/lib/data/user";
 
 interface ReadBlogProps {
   blog: BlogPosts;
@@ -15,11 +16,7 @@ interface ReadBlogProps {
 const ReadBlog = async ({
   blog: { authorId, title, description, bannerImage, tags, id, createdAt },
 }: ReadBlogProps) => {
-  const user = (await prisma.user.findUnique({
-    where: {
-      id: authorId!,
-    },
-  })) as User;
+  const user = (await getUserById(authorId!)) as User;
 
   return (
     <Link

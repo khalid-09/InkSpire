@@ -22,7 +22,7 @@ import {
   LockOpen1Icon,
 } from "@radix-ui/react-icons";
 import { FaUser } from "react-icons/fa6";
-import { loginUser, signupUser } from "@/actions/auth";
+import { signupUser } from "@/actions/auth";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 

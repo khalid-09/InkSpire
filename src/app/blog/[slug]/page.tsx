@@ -2,6 +2,7 @@ import RichTextEditor from "@/components/blog/editor/rich-text-editor";
 import BlogActivity from "@/components/blog/home/blog-activity";
 import { H1 } from "@/components/typography";
 import prisma from "@/db/db";
+import { getUserById } from "@/lib/data/user";
 import { convertDate } from "@/lib/utils";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -49,11 +50,7 @@ const BlogPage = async ({ params }: BlogPageProps) => {
 
   const { authorId, title, bannerImage, content, createdAt } = blog;
 
-  const user = await prisma.user.findUnique({
-    where: {
-      id: authorId!,
-    },
-  });
+  const user = await getUserById(authorId!);
 
   return (
     <article className="space-y-10">

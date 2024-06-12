@@ -17,12 +17,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { TfiPencilAlt } from "react-icons/tfi";
+import { getSessionUser } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
 const HeaderNav = async () => {
-  const session = await auth();
-  const user = session?.user;
+  const user = await getSessionUser();
 
   return (
     <header className="border-b border-muted/50 ">

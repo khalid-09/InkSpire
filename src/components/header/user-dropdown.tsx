@@ -20,21 +20,21 @@ import Link from "next/link";
 import { getUserById } from "@/lib/data/user";
 import SignOutBtn from "../auth/sign-out-btn";
 import AnimationWrapper from "../animation-wrapper";
+import { getSessionUser } from "@/lib/utils";
 
 const UserDropdown = async () => {
-  const session = await auth();
-  const id = session?.user?.id;
-  const user = await getUserById(id!);
+  const user = await getSessionUser();
+  const author = await getUserById(user?.id!);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
           <Image
-            src={user?.image! || "/vercel.svg"}
+            src={author?.image! || "/vercel.svg"}
             height={50}
             width={50}
-            alt={user?.name!}
+            alt={author?.name!}
           />
         </Avatar>
       </DropdownMenuTrigger>
@@ -55,7 +55,7 @@ const UserDropdown = async () => {
             className="cursor-pointer text-base font-medium"
             asChild
           >
-            <Link href={`/user/${user?.username}`}>Profile</Link>
+            <Link href={`/user/${author?.username}`}>Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer text-base font-medium"
@@ -75,7 +75,7 @@ const UserDropdown = async () => {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <span className="font-semibold">@{user?.username}</span>
+            <span className="font-semibold">@{author?.username}</span>
           </DropdownMenuItem>
         </AnimationWrapper>
       </DropdownMenuContent>

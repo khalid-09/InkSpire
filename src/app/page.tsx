@@ -42,7 +42,7 @@ const HomePage = async () => {
               variant="secondary"
               className="px-3 py-2 text-sm transition hover:scale-105"
             >
-              <Link href="/category/react">React</Link>
+              React
             </Badge>
             <Badge
               variant="secondary"
