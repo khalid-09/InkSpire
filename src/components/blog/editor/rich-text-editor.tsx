@@ -13,7 +13,7 @@ import { uploadFiles } from "@/lib/uploadthing";
 
 interface RichTextEditorProps {
   editable: boolean;
-  content?: string;
+  content: string;
 }
 
 const RichTextEditor = ({ content, editable }: RichTextEditorProps) => {
@@ -40,7 +40,6 @@ const RichTextEditor = ({ content, editable }: RichTextEditorProps) => {
             blocks: JSON.stringify(editor.document, null, 2),
           }));
         }}
-        className=""
         editor={editor}
         editable={editable}
       />

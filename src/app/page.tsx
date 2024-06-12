@@ -1,16 +1,16 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ArrowRightIcon, Link2Icon } from "@radix-ui/react-icons";
-import { GoHeart } from "react-icons/go";
 import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import prisma from "@/db/db";
 import { BlogPosts } from "@prisma/client";
-import { H3, H4, P } from "@/components/typography";
 import ReadBlog from "@/components/blog/home/read-blog";
 
 const HomePage = async () => {
-  const blogs: BlogPosts[] = await prisma.blogPosts.findMany({});
+  const blogs: BlogPosts[] = await prisma.blogPosts.findMany({
+    where: {
+      draft: false,
+    },
+  });
 
   return (
     <>

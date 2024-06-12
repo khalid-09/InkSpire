@@ -23,7 +23,7 @@ const ReadBlog = async ({
 
   return (
     <Link
-      href={`/blog/${encodeURIComponent(id)}`}
+      href={`/blog/${id}`}
       className="group flex justify-between gap-4 py-4"
     >
       <div className="w-full">

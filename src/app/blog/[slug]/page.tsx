@@ -3,9 +3,11 @@ import BlogActivity from "@/components/blog/home/blog-activity";
 import { H1 } from "@/components/typography";
 import prisma from "@/db/db";
 import { convertDate } from "@/lib/utils";
-import { BlogPosts } from "@prisma/client";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import { cache } from "react";
 
 interface BlogPageProps {
   params: {
@@ -13,13 +15,37 @@ interface BlogPageProps {
   };
 }
 
+// export const generateStaticParams = async () => {
+//   const blogPosts = await prisma.blogPosts.findMany({
+//     where: {
+//       draft: false,
+//     },
+//     select: {
+//       id: true,
+//     },
+//   });
+
+//   return blogPosts.map(({ id }) => id);
+// };
+
+const getBlog = cache(async (id: string) => {
+  const blog = await prisma.blogPosts.findUnique({ where: { id } });
+  if (!blog) notFound();
+  return blog;
+});
+
+export const generateMetadata = async ({
+  params: { slug },
+}: BlogPageProps): Promise<Metadata> => {
+  const job = await getBlog(slug);
+  return {
+    title: `${job.title}`,
+  };
+};
+
 const BlogPage = async ({ params }: BlogPageProps) => {
-  const id = decodeURIComponent(params.slug);
-  const blog = (await prisma.blogPosts.findUnique({
-    where: {
-      id,
-    },
-  })) as BlogPosts;
+  const id = params.slug;
+  const blog = await getBlog(id);
 
   const { authorId, title, bannerImage, content, createdAt } = blog;
 
