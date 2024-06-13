@@ -12,6 +12,10 @@ const BlogActivity = () => {
   const [likes, setLikes] = useState(0);
 
   const handleClick = () => {
+    if (likes === 1) {
+      setLikes(0);
+      return toast.warning("Removed from favorites 💔");
+    }
     setLikes(1);
     toast.success("Added to favorites 💖");
   };

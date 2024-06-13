@@ -13,7 +13,7 @@ const UserPanelLayout = async ({
   return (
     <section className="flex h-[calc(100dvh-130px)] flex-col md:flex-row">
       <UserNavSideBar />
-      <div className="w-6/7 mt-10">{children}</div>
+      <div className="mt-10 w-full md:w-[80%]">{children}</div>
     </section>
   );
 };

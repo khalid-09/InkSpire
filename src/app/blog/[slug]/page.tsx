@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import BlogPageLoading from "./loading";
 
 interface BlogPageProps {
   params: {
@@ -54,41 +55,44 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
   const user = await getUserById(authorId!);
 
   return (
-    <article className="space-y-10">
-      <div className="relative h-96 w-full overflow-hidden rounded">
-        <Image
-          src={bannerImage}
-          alt={title}
-          className="absolute object-cover"
-          fill
-        />
-      </div>
-      <H1>{title}</H1>
-      <div className="flex w-full items-start justify-between gap-3">
-        <div className="mb-2 flex w-full items-center gap-5 md:gap-7">
-          <div className="relative h-12 w-12 overflow-hidden rounded-full">
-            <Image
-              src={user?.image! || "/vercel.svg"}
-              fill
-              alt={user?.name!}
-              className="absolute object-cover"
-            />
+    <>
+      {" "}
+      <article className="space-y-10">
+        <div className="relative h-96 w-full overflow-hidden rounded">
+          <Image
+            src={bannerImage}
+            alt={title}
+            className="absolute object-cover"
+            fill
+          />
+        </div>
+        <H1>{title}</H1>
+        <div className="flex w-full items-start justify-between gap-3">
+          <div className="mb-2 flex w-full items-center gap-5 md:gap-7">
+            <div className="relative h-12 w-12 overflow-hidden rounded-full">
+              <Image
+                src={user?.image! || "/vercel.svg"}
+                fill
+                alt={user?.name!}
+                className="absolute object-cover"
+              />
+            </div>
+            <div>
+              <p className="font-medium">{user?.name}</p>
+              <p className="text-sm text-muted-foreground underline transition dark:hover:text-primary-foreground">
+                <Link href={`/user/${user?.username}`}>@{user?.username}</Link>
+              </p>
+            </div>
           </div>
           <div>
-            <p className="font-medium">{user?.name}</p>
-            <p className="text-sm text-muted-foreground underline transition dark:hover:text-primary-foreground">
-              <Link href="/">@{user?.username}</Link>
-            </p>
+            <p>Published on {convertDate(createdAt)}</p>
           </div>
         </div>
-        <div>
-          <p>Published on {convertDate(createdAt)}</p>
-        </div>
-      </div>
-      <BlogActivity />
-      <RichTextEditor editable={false} content={content} />
-      <BlogActivity />
-    </article>
+        <BlogActivity />
+        <RichTextEditor editable={false} content={content} />
+        <BlogActivity />
+      </article>
+    </>
   );
 };
 

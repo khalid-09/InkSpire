@@ -39,7 +39,9 @@ const ReadBlog = async ({
         <div className="space-y-3">
           <div className="space-y-2">
             <H3 className="transition group-hover:text-primary">{title}</H3>
-            <P className="[&:not(:first-child)]:mt-0">{description}</P>
+            <P className="line-clamp-2 [&:not(:first-child)]:mt-0">
+              {description}
+            </P>
           </div>
           <div className="flex items-center gap-3">
             <Badge>{tags.at(0)}</Badge>

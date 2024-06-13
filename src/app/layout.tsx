@@ -13,7 +13,7 @@ const montserrat = Montserrat({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: {
     template: "%s | InkSpire",
-    default: "InkSpire",
+    default: "InkSpire | Blog Platform for Developers",
   },
   description:
     "Ink-Spire is a blog platform for developers to share their knowledge and experience.",

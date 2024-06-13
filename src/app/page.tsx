@@ -1,10 +1,11 @@
 import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import prisma from "@/db/db";
 import { BlogPosts } from "@prisma/client";
 import ReadBlog from "@/components/blog/home/read-blog";
 import { H1 } from "@/components/typography";
+import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
+import { Suspense } from "react";
 
 const HomePage = async () => {
   const blogs: BlogPosts[] = await prisma.blogPosts.findMany({
@@ -25,13 +26,16 @@ const HomePage = async () => {
               </TabsTrigger>
             </TabsList>
             <TabsContent className="space-y-4 divide-y-2" value="home">
-              {blogs.length === 0 ? (
+              <Suspense fallback={<HomeBlogSkeleton />}>
+                {blogs.map((blog) => (
+                  <ReadBlog key={blog.id} blog={blog} />
+                ))}
+              </Suspense>
+              {blogs.length === 0 && (
                 <H1 className="mt-10">
                   No Blogs Found ;)
                   <br /> Start writing some 🙂
                 </H1>
-              ) : (
-                blogs.map((blog) => <ReadBlog key={blog.id} blog={blog} />)
               )}
             </TabsContent>
             <TabsContent value="trending">
@@ -44,30 +48,17 @@ const HomePage = async () => {
             Top categories
           </h4>
           <div className="flex flex-wrap gap-2">
-            <Badge
-              variant="secondary"
-              className="px-3 py-2 text-sm transition hover:scale-105"
-            >
-              React
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="px-3 py-2 text-sm transition hover:scale-105"
-            >
-              CSS
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="px-3 py-2 text-sm transition hover:scale-105"
-            >
-              Animations
-            </Badge>
-            <Badge
-              variant="secondary"
-              className="px-3 py-2 text-sm transition hover:scale-105"
-            >
-              Perfromance
-            </Badge>
+            {blogs.map((blog) =>
+              blog.tags.map((tag) => (
+                <Badge
+                  key={tag}
+                  variant="secondary"
+                  className="cursor-pointer px-3 py-2 text-sm transition hover:scale-105"
+                >
+                  {tag}
+                </Badge>
+              )),
+            )}
           </div>
         </div>
       </section>
