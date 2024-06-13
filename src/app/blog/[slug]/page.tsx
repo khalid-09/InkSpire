@@ -16,18 +16,20 @@ interface BlogPageProps {
   };
 }
 
-// export const generateStaticParams = async () => {
-//   const blogPosts = await prisma.blogPosts.findMany({
-//     where: {
-//       draft: false,
-//     },
-//     select: {
-//       id: true,
-//     },
-//   });
+export const generateStaticParams = async () => {
+  const blogPosts = await prisma.blogPosts.findMany({
+    where: {
+      draft: false,
+    },
+    select: {
+      id: true,
+    },
+  });
 
-//   return blogPosts.map(({ id }) => id);
-// };
+  return blogPosts.map(({ id }) => ({
+    slug: id,
+  }));
+};
 
 const getBlog = cache(async (id: string) => {
   const blog = await prisma.blogPosts.findUnique({ where: { id } });

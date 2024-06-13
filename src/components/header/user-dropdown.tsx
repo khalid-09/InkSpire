@@ -21,20 +21,21 @@ import { getUserById } from "@/lib/data/user";
 import SignOutBtn from "../auth/sign-out-btn";
 import AnimationWrapper from "../animation-wrapper";
 import { getSessionUser } from "@/lib/utils";
+import { User } from "@prisma/client";
 
 const UserDropdown = async () => {
   const user = await getSessionUser();
-  const author = await getUserById(user?.id!);
+  const author = (await getUserById(user?.id!)) as User;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
           <Image
-            src={author?.image! || "/vercel.svg"}
+            src={author.image! || "/vercel.svg"}
             height={50}
             width={50}
-            alt={author?.name!}
+            alt={author.name!}
           />
         </Avatar>
       </DropdownMenuTrigger>
@@ -55,7 +56,7 @@ const UserDropdown = async () => {
             className="cursor-pointer text-base font-medium"
             asChild
           >
-            <Link href={`/user/${author?.username}`}>Profile</Link>
+            <Link href={`/user/${author.username}`}>Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem
             className="cursor-pointer text-base font-medium"
@@ -75,7 +76,7 @@ const UserDropdown = async () => {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem>
-            <span className="font-semibold">@{author?.username}</span>
+            <span className="font-semibold">@{author.username}</span>
           </DropdownMenuItem>
         </AnimationWrapper>
       </DropdownMenuContent>

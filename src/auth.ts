@@ -26,7 +26,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
     async jwt({ token }) {
-      console.log(token);
       return token;
     },
   },
