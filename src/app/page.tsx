@@ -26,7 +26,11 @@ const HomePage = async () => {
               </TabsTrigger>
             </TabsList>
             <TabsContent className="space-y-4 divide-y-2" value="home">
-              <Suspense fallback={<HomeBlogSkeleton />}>
+              <Suspense
+                fallback={Array.from({ length: 5 }).map((_, i) => (
+                  <HomeBlogSkeleton key={i} />
+                ))}
+              >
                 {blogs.map((blog) => (
                   <ReadBlog key={blog.id} blog={blog} />
                 ))}

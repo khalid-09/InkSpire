@@ -9,7 +9,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import BlogPageLoading from "./loading";
 
 interface BlogPageProps {
   params: {

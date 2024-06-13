@@ -7,7 +7,6 @@ import { saveDraft } from "@/actions/blog";
 
 import BlogTitle from "./blog-title";
 import BannerImage from "./banner-image";
-import Loading from "@/app/blog/loading";
 
 import { Button } from "../../ui/button";
 import { toast } from "sonner";
@@ -15,7 +14,6 @@ import { Loader2 } from "lucide-react";
 
 const RichTextEditor = dynamic(() => import("./rich-text-editor"), {
   ssr: false,
-  loading: () => <Loading />,
 });
 
 interface BlogEditorProps {

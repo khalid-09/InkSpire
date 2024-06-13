@@ -1,5 +1,4 @@
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
-import { H1 } from "@/components/typography";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 

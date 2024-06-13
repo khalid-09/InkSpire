@@ -3,11 +3,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 const BlogPageLoading = () => {
   return (
     <article className="mb-10 space-y-10">
-      <Skeleton className="h-96 w-full rounded-md" />
+      <Skeleton className="h-96 w-full rounded" />
       <div className="space-y-3">
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-3/5" />
-        <Skeleton className="h-4 w-2/5" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-8 w-2/5" />
       </div>
       <div className="flex w-full items-start justify-between gap-3">
         <div className="mb-2 flex w-full items-center gap-5 md:gap-7">
