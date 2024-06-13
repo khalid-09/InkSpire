@@ -1,8 +1,9 @@
 "use server";
 
 import prisma from "@/db/db";
-import { getSessionUser } from "@/lib/utils";
+import { getSessionUser, toSlug } from "@/lib/utils";
 import { BlogSchema, blogSchema } from "@/lib/validation/blog";
+import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
@@ -12,12 +13,14 @@ export const saveDraft = async (
   image: string,
 ) => {
   const user = await getSessionUser();
+  const slug = `${toSlug(title)}-${nanoid(10)}`;
   await prisma.blogPosts.create({
     data: {
       title,
       content: blocks,
       bannerImage: image,
       authorId: user?.id,
+      slug,
       draft: true,
     },
   });
@@ -36,6 +39,8 @@ export const createBlog = async (blog: BlogSchema) => {
 
   const { tags, title, blocks, description, image } = validatedFields.data;
 
+  const slug = `${toSlug(title)}-${nanoid(10)}`;
+
   const user = await getSessionUser();
 
   await prisma.blogPosts.create({
@@ -46,6 +51,7 @@ export const createBlog = async (blog: BlogSchema) => {
       bannerImage: image,
       content: blocks,
       authorId: user?.id,
+      slug,
       draft: false,
     },
   });

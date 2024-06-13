@@ -30,3 +30,10 @@ export const convertDate = (
 ): string => {
   return format(new Date(dateString), formatString);
 };
+
+export const toSlug = (str: string) => {
+  return str
+    .toLowerCase()
+    .replace(/ /g, "-") // to replace spaces with dashes
+    .replace(/[^\w-]+/g, ""); // to replace multiple spaces with a single space
+};

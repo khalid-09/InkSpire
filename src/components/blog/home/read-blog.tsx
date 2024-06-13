@@ -14,13 +14,13 @@ interface ReadBlogProps {
 }
 
 const ReadBlog = async ({
-  blog: { authorId, title, description, bannerImage, tags, id, createdAt },
+  blog: { authorId, title, description, bannerImage, tags, createdAt, slug },
 }: ReadBlogProps) => {
   const user = (await getUserById(authorId!)) as User;
 
   return (
     <Link
-      href={`/blog/${id}`}
+      href={`/blog/${slug}`}
       className="group flex justify-between gap-4 py-4"
     >
       <div className="w-full">

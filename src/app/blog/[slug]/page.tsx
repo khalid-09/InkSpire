@@ -22,17 +22,17 @@ export const generateStaticParams = async () => {
       draft: false,
     },
     select: {
-      id: true,
+      slug: true,
     },
   });
 
-  return blogPosts.map(({ id }) => ({
-    slug: id,
+  return blogPosts.map(({ slug }) => ({
+    slug,
   }));
 };
 
-const getBlog = cache(async (id: string) => {
-  const blog = await prisma.blogPosts.findUnique({ where: { id } });
+const getBlog = cache(async (slug: string) => {
+  const blog = await prisma.blogPosts.findUnique({ where: { slug } });
   if (!blog) notFound();
   return blog;
 });
@@ -46,9 +46,8 @@ export const generateMetadata = async ({
   };
 };
 
-const BlogPage = async ({ params }: BlogPageProps) => {
-  const id = params.slug;
-  const blog = await getBlog(id);
+const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
+  const blog = await getBlog(slug);
 
   const { authorId, title, bannerImage, content, createdAt } = blog;
 

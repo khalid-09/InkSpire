@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import prisma from "@/db/db";
 import { BlogPosts } from "@prisma/client";
 import ReadBlog from "@/components/blog/home/read-blog";
+import { H1 } from "@/components/typography";
 
 const HomePage = async () => {
   const blogs: BlogPosts[] = await prisma.blogPosts.findMany({
@@ -24,9 +25,14 @@ const HomePage = async () => {
               </TabsTrigger>
             </TabsList>
             <TabsContent className="space-y-4 divide-y-2" value="home">
-              {blogs.map((blog) => (
-                <ReadBlog key={blog.id} blog={blog} />
-              ))}
+              {blogs.length === 0 ? (
+                <H1 className="mt-10">
+                  No Blogs Found ;)
+                  <br /> Start writing some 🙂
+                </H1>
+              ) : (
+                blogs.map((blog) => <ReadBlog key={blog.id} blog={blog} />)
+              )}
             </TabsContent>
             <TabsContent value="trending">
               Change your password here.
