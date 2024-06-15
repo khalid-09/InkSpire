@@ -34,6 +34,7 @@ const RichTextEditor = ({ content, editable }: RichTextEditorProps) => {
     <BlockNoteView
       theme={resolvedTheme === "dark" ? "dark" : "light"}
       onChange={async () => {
+        if (!editable) return;
         setBlog((blog) => ({
           ...blog,
           blocks: JSON.stringify(editor.document, null, 2),

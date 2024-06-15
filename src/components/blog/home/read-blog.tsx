@@ -1,11 +1,11 @@
 import prisma from "@/db/db";
-import { BlogPosts, User } from "@prisma/client";
+import { BlogPosts } from "@prisma/client";
 import Link from "next/link";
 import Image from "next/image";
 
 import { Badge } from "@/components/ui/badge";
 import { H3, P } from "@/components/typography";
-import { GoHeart } from "react-icons/go";
+import { GoHeartFill } from "react-icons/go";
 import { convertDate } from "@/lib/utils";
 import { getUserById } from "@/lib/data/user";
 
@@ -14,9 +14,30 @@ interface ReadBlogProps {
 }
 
 const ReadBlog = async ({
-  blog: { authorId, title, description, bannerImage, tags, createdAt, slug },
+  blog: {
+    authorId,
+    title,
+    description,
+    bannerImage,
+    tags,
+    createdAt,
+    slug,
+    id,
+  },
 }: ReadBlogProps) => {
-  const user = (await getUserById(authorId!)) as User;
+  const user = await getUserById(authorId!);
+  if (!user) throw new Error("User not found");
+
+  const blogActivity = await prisma.activity.findUnique({
+    where: {
+      blogPostId: id,
+    },
+  });
+
+  if (!blogActivity)
+    throw new Error("Trouble fetching blog activity, try again later!");
+
+  const { totalLikes } = blogActivity;
 
   return (
     <Link
@@ -45,7 +66,10 @@ const ReadBlog = async ({
           </div>
           <div className="flex items-center gap-3">
             <Badge>{tags.at(0)}</Badge>
-            <GoHeart className="h-5 w-5" />
+            <div className="flex items-center gap-1">
+              <GoHeartFill className="h-5 w-5" />
+              <p>{totalLikes || 0}</p>
+            </div>
           </div>
         </div>
       </div>

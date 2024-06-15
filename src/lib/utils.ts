@@ -23,8 +23,6 @@ export const generateUsername = async (email: string) => {
 export const getSessionUser = async () => {
   const session = await auth();
   const user = session?.user;
-
-  if (!user) throw new Error("User not found");
   return user;
 };
 

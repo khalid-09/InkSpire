@@ -28,7 +28,8 @@ model User {
 
   socialLinks SocialLinks[]
   blogPosts   BlogPosts[]
-  comments    Comments[]
+  likes       Like[]
+  // comments    Comments[]
   // notifications Notifications[] @relation("UserNotifications")
 
   @@map("users")
@@ -100,17 +101,32 @@ model BlogPosts {
 
   author User? @relation(fields: [authorId], references: [id])
 
-  activity       Activity[]
-  comments       Comments[] @relation("BlogComments")
-  commentsAuthor Comments[] @relation("BlogAuthorComments")
+  activity Activity[]
+  likes    Like[]
+  // comments       Comments[] @relation("BlogComments")
+  // commentsAuthor Comments[] @relation("BlogAuthorComments")
   // notifications  Notifications[] @relation("BlogNotifications")
 
   @@map("blog_posts")
 }
 
+model Like {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String @db.ObjectId
+  blogPostId String @db.ObjectId
+
+  createdAt DateTime @default(now())
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  blogPost BlogPosts @relation(fields: [blogPostId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, blogPostId])
+  @@map("likes")
+}
+
 model Activity {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  blogPostId String? @db.ObjectId
+  blogPostId String? @unique @db.ObjectId
 
   totalLikes          Int @default(0)
   totalComments       Int @default(0)
@@ -122,30 +138,30 @@ model Activity {
   @@map("activity")
 }
 
-model Comments {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+// model Comments {
+//   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  blogId       String    @db.ObjectId
-  blog         BlogPosts @relation("BlogComments", fields: [blogId], references: [id])
-  blogAuthorId String    @db.ObjectId
-  blogAuthor   BlogPosts @relation("BlogAuthorComments", fields: [blogAuthorId], references: [id])
+//   blogId       String    @db.ObjectId
+//   blog         BlogPosts @relation("BlogComments", fields: [blogId], references: [id])
+//   blogAuthorId String    @db.ObjectId
+//   blogAuthor   BlogPosts @relation("BlogAuthorComments", fields: [blogAuthorId], references: [id])
 
-  comment String @default("")
+//   comment String @default("")
 
-  children Comments[] @relation("CommentChildren")
+//   children Comments[] @relation("CommentChildren")
 
-  commentedById String? @db.ObjectId
-  commentedBy   User?   @relation(fields: [commentedById], references: [id])
+//   commentedById String? @db.ObjectId
+//   commentedBy   User?   @relation(fields: [commentedById], references: [id])
 
-  isReply Boolean?
+//   isReply Boolean?
 
-  parentId String?   @db.ObjectId
-  parent   Comments? @relation("CommentChildren", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+//   parentId String?   @db.ObjectId
+//   parent   Comments? @relation("CommentChildren", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  commentedAt DateTime @default(now())
+//   commentedAt DateTime @default(now())
 
-  @@map("comments")
-}
+//   @@map("comments")
+// }
 
 // enum NotificationType {
 //   LIKE

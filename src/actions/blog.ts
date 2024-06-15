@@ -43,6 +43,13 @@ export const createBlog = async (blog: BlogSchema) => {
 
   const user = await getSessionUser();
 
+  if (!user)
+    return {
+      message: "User not found, Login or SignUp to continue!",
+      reason: "User not found",
+      type: "error",
+    };
+
   const { id: authorId } = user;
 
   const createdBlog = await prisma.blogPosts.create({
@@ -77,12 +84,12 @@ export const createBlog = async (blog: BlogSchema) => {
     },
   });
 
-  await prisma.comments.create({
-    data: {
-      blogId,
-      blogAuthorId: authorId!,
-    },
-  });
+  // await prisma.comments.create({
+  //   data: {
+  //     blogId,
+  //     blogAuthorId: authorId!,
+  //   },
+  // });
 
   revalidatePath("/");
   redirect("/");

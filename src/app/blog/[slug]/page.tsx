@@ -4,6 +4,7 @@ import { H1 } from "@/components/typography";
 import prisma from "@/db/db";
 import { getUserById } from "@/lib/data/user";
 import { convertDate } from "@/lib/utils";
+import { Activity } from "@prisma/client";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -49,7 +50,13 @@ export const generateMetadata = async ({
 const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
   const blog = await getBlog(slug);
 
-  const { authorId, title, bannerImage, content, createdAt } = blog;
+  const { authorId, title, bannerImage, content, createdAt, id } = blog;
+
+  const blogActivity = (await prisma.activity.findUnique({
+    where: {
+      blogPostId: id,
+    },
+  })) as Activity;
 
   const user = await getUserById(authorId!);
 
@@ -87,9 +94,9 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
             <p>Published on {convertDate(createdAt)}</p>
           </div>
         </div>
-        <BlogActivity />
+        <BlogActivity blogId={id} blogActivity={blogActivity} />
         <RichTextEditor editable={false} content={content} />
-        <BlogActivity />
+        {/* <BlogActivity /> */}
       </article>
     </>
   );

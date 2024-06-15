@@ -60,11 +60,11 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
     // TODO : VALIDATE ALL THE FIELDS
     startTransition(async () => {
       try {
-        const respnse = await createBlog(blog);
+        const response = await createBlog(blog);
 
-        if (respnse) {
-          toast.error(respnse.message);
-          console.error(respnse.reason);
+        if (response) {
+          toast.error(response.message);
+          console.error(response.reason);
           return;
         }
 
