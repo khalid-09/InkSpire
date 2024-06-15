@@ -31,19 +31,17 @@ const RichTextEditor = ({ content, editable }: RichTextEditorProps) => {
   });
 
   return (
-    <div className="">
-      <BlockNoteView
-        theme={resolvedTheme === "dark" ? "dark" : "light"}
-        onChange={async () => {
-          setBlog((blog) => ({
-            ...blog,
-            blocks: JSON.stringify(editor.document, null, 2),
-          }));
-        }}
-        editor={editor}
-        editable={editable}
-      />
-    </div>
+    <BlockNoteView
+      theme={resolvedTheme === "dark" ? "dark" : "light"}
+      onChange={async () => {
+        setBlog((blog) => ({
+          ...blog,
+          blocks: JSON.stringify(editor.document, null, 2),
+        }));
+      }}
+      editor={editor}
+      editable={editable}
+    />
   );
 };
 

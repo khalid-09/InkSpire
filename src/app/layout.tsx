@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "@/styles/globals.css";
+import "@/styles/editor.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import HeaderNav from "@/components/header/header-nav";
 import { Toaster } from "@/components/ui/sonner";

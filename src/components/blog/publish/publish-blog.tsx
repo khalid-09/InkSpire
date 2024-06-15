@@ -1,7 +1,20 @@
 "use client";
 
+import { Dispatch, SetStateAction, useState, useTransition } from "react";
+import { useBlog } from "@/context/blog-context";
+import { BlogSchema } from "@/lib/validation/blog";
+import { createBlog } from "@/actions/blog";
+import Image from "next/image";
+
+import RichTextEditor from "../editor/rich-text-editor";
 import { H4, P } from "@/components/typography";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Cross1Icon, CrossCircledIcon } from "@radix-ui/react-icons";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 import {
   Card,
   CardContent,
@@ -9,18 +22,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useBlog } from "@/context/blog-context";
-import { Cross1Icon, CrossCircledIcon } from "@radix-ui/react-icons";
-import Image from "next/image";
-import { Dispatch, SetStateAction, useState, useTransition } from "react";
-import RichTextEditor from "../editor/rich-text-editor";
-import { BlogSchema } from "@/lib/validation/blog";
-import { Loader2 } from "lucide-react";
-import { createBlog } from "@/actions/blog";
-import { toast } from "sonner";
 
 interface PublishBlogProps {
   setType: Dispatch<SetStateAction<"editor" | "publish">>;
@@ -184,8 +185,7 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
           </Card>
         </section>
       </div>
-
-      <div className="mt-3 w-full">
+      <div className="mb-4 w-full">
         <RichTextEditor editable={false} content={blocks} />
       </div>
     </>

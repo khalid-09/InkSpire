@@ -43,26 +43,44 @@ export const createBlog = async (blog: BlogSchema) => {
 
   const user = await getSessionUser();
 
-  await prisma.blogPosts.create({
+  const { id: authorId } = user;
+
+  const createdBlog = await prisma.blogPosts.create({
     data: {
       title,
       description,
       tags,
       bannerImage: image,
       content: blocks,
-      authorId: user?.id,
+      authorId,
       slug,
       draft: false,
     },
   });
+
   await prisma.user.update({
     where: {
-      id: user?.id,
+      id: authorId,
     },
     data: {
       totalPosts: {
         increment: 1,
       },
+    },
+  });
+
+  const { id: blogId } = createdBlog;
+
+  await prisma.activity.create({
+    data: {
+      blogPostId: blogId,
+    },
+  });
+
+  await prisma.comments.create({
+    data: {
+      blogId,
+      blogAuthorId: authorId!,
     },
   });
 

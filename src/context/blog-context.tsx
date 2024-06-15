@@ -9,14 +9,6 @@ import {
   useState,
 } from "react";
 
-// export type Blog = {
-//   title: string;
-//   blocks: string;
-//   image: string;
-//   description: string;
-//   tags: string[];
-// };
-
 interface BlogContextInterface {
   blog: BlogSchema;
   setBlog: Dispatch<SetStateAction<BlogSchema>>;

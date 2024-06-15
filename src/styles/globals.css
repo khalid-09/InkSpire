@@ -57,3 +57,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  #editor {
+    min-height: 200px;
+  }
+
+  .ce-block__content,
+  .ce-toolbar__content {
+    max-width: calc(100% - 80px) !important;
+  }
+
+  .not-editable .ce-block__content,
+  .not-editable .ce-toolbar__content {
+    max-width: 100% !important;
+  }
+}

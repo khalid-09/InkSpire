@@ -1,0 +1,33 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+.bn-container.dark,
+.bn-container.dark {
+  font-family: "Montserrat", sans-serif;
+  min-height: 350px;
+  background-color: var(--background);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.bn-editor {
+  min-height: 200px;
+  max-width: 100% !important;
+}
+
+.bn-block-group > * + * {
+  margin-top: 1rem;
+}
+
+div.ProseMirror.bn-editor.bn-default-styles {
+  background-color: var(--background);
+  padding: 0px 0px;
+}
+
+div.bn-block {
+  line-height: 1.4rem;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.bn-file-block-content-wrapper {
+  width: 100%;
+}

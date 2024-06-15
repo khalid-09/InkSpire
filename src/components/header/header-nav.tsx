@@ -1,23 +1,23 @@
 import Link from "next/link";
+import { getSessionUser } from "@/lib/utils";
+import { Inter } from "next/font/google";
+
 import { ModeToggle } from "../theme-toggle";
 import { Button } from "../ui/button";
-import {
-  BellIcon,
-  MagnifyingGlassIcon,
-  ShadowNoneIcon,
-} from "@radix-ui/react-icons";
 import { Input } from "../ui/input";
-import { Inter } from "next/font/google";
-import { auth } from "@/auth";
 import UserDropdown from "./user-dropdown";
+import { TfiPencilAlt } from "react-icons/tfi";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { TfiPencilAlt } from "react-icons/tfi";
-import { getSessionUser } from "@/lib/utils";
+import {
+  BellIcon,
+  MagnifyingGlassIcon,
+  ShadowNoneIcon,
+} from "@radix-ui/react-icons";
 
 const inter = Inter({ subsets: ["latin"] });
 

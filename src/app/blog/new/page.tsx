@@ -6,7 +6,11 @@ const NewBlogPage = async () => {
   const user = await getSessionUser();
   if (!user) redirect("/login");
 
-  return <CreateNewBlog />;
+  return (
+    <>
+      <CreateNewBlog />
+    </>
+  );
 };
 
 export default NewBlogPage;

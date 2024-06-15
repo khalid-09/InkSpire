@@ -49,12 +49,10 @@ const BlogEditor = ({ setType }: BlogEditorProps) => {
   };
 
   return (
-    <section className="mb-10  space-y-3">
-      <main className="mt-10 flex flex-col items-center justify-between">
-        <BannerImage />
-      </main>
+    <section className="my-10 flex w-full flex-col space-y-3">
+      <BannerImage />
       <BlogTitle />
-      <RichTextEditor editable={true} content={blog.blocks} />
+      <RichTextEditor content={blog.blocks} editable={true} />
       <div className="flex w-full items-center justify-end gap-2">
         <Button onClick={handleDraft} variant="secondary">
           {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
