@@ -3,7 +3,7 @@ import BlogActivity from "@/components/blog/home/blog-activity";
 import { H1 } from "@/components/typography";
 import prisma from "@/db/db";
 import { getUserById } from "@/lib/data/user";
-import { convertDate } from "@/lib/utils";
+import { convertDate, getSessionUser } from "@/lib/utils";
 import { Activity } from "@prisma/client";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -60,6 +60,9 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
 
   const user = await getUserById(authorId!);
 
+  const sessionUser = await getSessionUser();
+  const disabled = sessionUser ? false : true;
+
   return (
     <>
       {" "}
@@ -94,7 +97,11 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
             <p>Published on {convertDate(createdAt)}</p>
           </div>
         </div>
-        <BlogActivity blogId={id} blogActivity={blogActivity} />
+        <BlogActivity
+          disabled={disabled}
+          blogId={id}
+          blogActivity={blogActivity}
+        />
         <RichTextEditor editable={false} content={content} />
         {/* <BlogActivity /> */}
       </article>

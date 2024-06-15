@@ -62,7 +62,7 @@ export const removeLike = async (blogId: string) => {
 
 export const checkIfUserLiked = async (blogId: string) => {
   const user = await getSessionUser();
-  if (!user) throw new Error("User not found");
+  if (!user) return;
 
   const { id: userId } = user;
 
