@@ -1,13 +1,16 @@
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Suspense } from "react";
 import prisma from "@/db/db";
 import { BlogPosts } from "@prisma/client";
+
+import ReadTrendingBlogs from "@/components/blog/home/read-trending-blogs";
 import ReadBlog from "@/components/blog/home/read-blog";
-import { H1, H3, P } from "@/components/typography";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
-import { Suspense } from "react";
+
+import { Badge } from "@/components/ui/badge";
+import { H1, H3, P } from "@/components/typography";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { TrendingUp } from "lucide-react";
-import TrendingBlogSkeleton from "@/components/blog/home/trending-blog-skeleton";
 
 const HomePage = async () => {
   const blogs: BlogPosts[] = await prisma.blogPosts.findMany({
@@ -53,20 +56,7 @@ const HomePage = async () => {
               )}
             </TabsContent>
             <TabsContent value="trending">
-              <Suspense
-                fallback={Array.from({ length: 5 }).map((_, i) => (
-                  <TrendingBlogSkeleton key={i} index={i} />
-                ))}
-              >
-                {trendingBlogs.map(({ blogPost }, i) => (
-                  <ReadBlog
-                    index={i}
-                    type="trending"
-                    key={blogPost?.id!}
-                    blog={blogPost!}
-                  />
-                ))}
-              </Suspense>
+              <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
             </TabsContent>
           </Tabs>
         </div>
@@ -90,20 +80,7 @@ const HomePage = async () => {
               <span>Trending </span>
               <TrendingUp />
             </H3>
-            <Suspense
-              fallback={Array.from({ length: 5 }).map((_, i) => (
-                <TrendingBlogSkeleton key={i} index={i} />
-              ))}
-            >
-              {trendingBlogs.map(({ blogPost }, i) => (
-                <ReadBlog
-                  index={i}
-                  type="trending"
-                  key={blogPost?.id!}
-                  blog={blogPost!}
-                />
-              ))}
-            </Suspense>
+            <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
           </div>
         </div>
       </section>
