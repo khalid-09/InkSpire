@@ -13,7 +13,7 @@ const TagSearch = async () => {
     },
   });
 
-  const uniqueTags = Array.from(new Set(tags.flatMap((tag) => tag.tags)));
+  const uniqueTags = Array.from(new Set(tags.flatMap((tag) => tag.tags[0])));
 
   return (
     <div className="mb-20 flex flex-wrap gap-2">

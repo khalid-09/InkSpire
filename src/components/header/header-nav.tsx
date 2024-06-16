@@ -18,6 +18,7 @@ import {
   MagnifyingGlassIcon,
   ShadowNoneIcon,
 } from "@radix-ui/react-icons";
+import TitleSearch from "../blog/home/title-search";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,7 +33,7 @@ const HeaderNav = async () => {
         </Link>
         <div className=" flex w-full max-w-6xl items-center justify-between gap-2 px-2">
           <div className="relative flex items-center gap-2 md:gap-4">
-            <Input className="text-base md:px-7" placeholder="Search..." />
+            <TitleSearch />
             <MagnifyingGlassIcon className="absolute left-2 top-[9px] hidden h-4 w-4 text-sm md:block" />
           </div>
           <div className="flex items-center gap-2 md:gap-3">

@@ -6,23 +6,30 @@ import ReadBlog from "@/components/blog/home/read-blog";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
 import TagSearch from "@/components/blog/home/tag-search";
 
-import { H1, H3, P } from "@/components/typography";
+import { H1, H3 } from "@/components/typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp } from "lucide-react";
 
 interface HomePageProps {
   searchParams: {
     tag?: string;
+    title?: string;
   };
 }
 
-const HomePage = async ({ searchParams: { tag } }: HomePageProps) => {
+const HomePage = async ({ searchParams: { tag, title } }: HomePageProps) => {
   const blogsPromise = prisma.blogPosts.findMany({
     where: {
       draft: false,
       ...(tag && {
         tags: {
           has: tag,
+        },
+      }),
+      ...(title && {
+        title: {
+          contains: title,
+          mode: "insensitive",
         },
       }),
     },
@@ -50,7 +57,7 @@ const HomePage = async ({ searchParams: { tag } }: HomePageProps) => {
         <div className="w-full md:w-2/3">
           <Tabs defaultValue="home">
             <TabsList>
-              <TabsTrigger value="home">Home </TabsTrigger>
+              <TabsTrigger value="home">{tag ? tag : "Home "}</TabsTrigger>
               <TabsTrigger className="block  md:hidden" value="trending">
                 Trending Blogs
               </TabsTrigger>

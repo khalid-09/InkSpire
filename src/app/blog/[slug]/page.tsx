@@ -43,6 +43,7 @@ export const generateMetadata = async ({
   const job = await getBlog(slug);
   return {
     title: `${job.title}`,
+    description: `${job.description}`,
   };
 };
 
