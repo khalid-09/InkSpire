@@ -7,6 +7,7 @@ import { H1, H3, P } from "@/components/typography";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
 import { Suspense } from "react";
 import { TrendingUp } from "lucide-react";
+import TrendingBlogSkeleton from "@/components/blog/home/trending-blog-skeleton";
 
 const HomePage = async () => {
   const blogs: BlogPosts[] = await prisma.blogPosts.findMany({
@@ -52,14 +53,20 @@ const HomePage = async () => {
               )}
             </TabsContent>
             <TabsContent value="trending">
-              {trendingBlogs.map(({ blogPost }, i) => (
-                <ReadBlog
-                  index={i}
-                  type="trending"
-                  key={blogPost?.id!}
-                  blog={blogPost!}
-                />
-              ))}
+              <Suspense
+                fallback={Array.from({ length: 5 }).map((_, i) => (
+                  <TrendingBlogSkeleton key={i} index={i} />
+                ))}
+              >
+                {trendingBlogs.map(({ blogPost }, i) => (
+                  <ReadBlog
+                    index={i}
+                    type="trending"
+                    key={blogPost?.id!}
+                    blog={blogPost!}
+                  />
+                ))}
+              </Suspense>
             </TabsContent>
           </Tabs>
         </div>
@@ -83,14 +90,20 @@ const HomePage = async () => {
               <span>Trending </span>
               <TrendingUp />
             </H3>
-            {trendingBlogs.map(({ blogPost }, i) => (
-              <ReadBlog
-                index={i}
-                type="trending"
-                key={blogPost?.id!}
-                blog={blogPost!}
-              />
-            ))}
+            <Suspense
+              fallback={Array.from({ length: 5 }).map((_, i) => (
+                <TrendingBlogSkeleton key={i} index={i} />
+              ))}
+            >
+              {trendingBlogs.map(({ blogPost }, i) => (
+                <ReadBlog
+                  index={i}
+                  type="trending"
+                  key={blogPost?.id!}
+                  blog={blogPost!}
+                />
+              ))}
+            </Suspense>
           </div>
         </div>
       </section>
