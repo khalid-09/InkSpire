@@ -3,15 +3,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import prisma from "@/db/db";
 import { BlogPosts } from "@prisma/client";
 import ReadBlog from "@/components/blog/home/read-blog";
-import { H1 } from "@/components/typography";
+import { H1, H3, P } from "@/components/typography";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
 import { Suspense } from "react";
+import { TrendingUp } from "lucide-react";
 
 const HomePage = async () => {
   const blogs: BlogPosts[] = await prisma.blogPosts.findMany({
     where: {
       draft: false,
     },
+  });
+
+  const trendingBlogs = await prisma.activity.findMany({
+    orderBy: {
+      totalLikes: "desc",
+    },
+    select: { blogPost: true },
+    take: 5,
   });
 
   return (
@@ -32,7 +41,7 @@ const HomePage = async () => {
                 ))}
               >
                 {blogs.map((blog) => (
-                  <ReadBlog key={blog.id} blog={blog} />
+                  <ReadBlog type="home" key={blog.id} blog={blog} />
                 ))}
               </Suspense>
               {blogs.length === 0 && (
@@ -43,15 +52,20 @@ const HomePage = async () => {
               )}
             </TabsContent>
             <TabsContent value="trending">
-              Change your password here.
+              {trendingBlogs.map(({ blogPost }, i) => (
+                <ReadBlog
+                  index={i}
+                  type="trending"
+                  key={blogPost?.id!}
+                  blog={blogPost!}
+                />
+              ))}
             </TabsContent>
           </Tabs>
         </div>
         <div className="w-full space-y-4 md:w-1/3">
-          <h4 className="mb-10 text-start text-2xl uppercase tracking-wide text-muted-foreground">
-            Top categories
-          </h4>
-          <div className="flex flex-wrap gap-2">
+          <H3 className=" text-start">Stories from all interests</H3>
+          <div className="mb-20 flex flex-wrap gap-2">
             {blogs.map((blog) =>
               blog.tags.map((tag) => (
                 <Badge
@@ -63,6 +77,20 @@ const HomePage = async () => {
                 </Badge>
               )),
             )}
+          </div>
+          <div className="hidden space-y-4 md:block">
+            <H3 className="flex items-center gap-2">
+              <span>Trending </span>
+              <TrendingUp />
+            </H3>
+            {trendingBlogs.map(({ blogPost }, i) => (
+              <ReadBlog
+                index={i}
+                type="trending"
+                key={blogPost?.id!}
+                blog={blogPost!}
+              />
+            ))}
           </div>
         </div>
       </section>

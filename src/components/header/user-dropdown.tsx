@@ -71,7 +71,10 @@ const UserDropdown = async () => {
             <Link href="/settings/edit-profile">Settings</Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="flex cursor-pointer flex-col items-start gap-2 text-base font-medium">
+          <DropdownMenuItem
+            className="flex cursor-pointer flex-col items-start gap-2 text-base font-medium"
+            asChild
+          >
             <SignOutBtn />
           </DropdownMenuItem>
           <DropdownMenuSeparator />

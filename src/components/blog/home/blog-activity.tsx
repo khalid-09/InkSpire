@@ -65,7 +65,7 @@ const BlogActivity = ({
   return (
     <div className="flex w-full items-center justify-between">
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <Button
             // disabled={disabled}
             onClick={handleLikes}
@@ -78,7 +78,7 @@ const BlogActivity = ({
               <GoHeart className="h-5 w-5" />
             )}
           </Button>
-          <p className="text-xl">{optimisticLikes}</p>
+          <p className="text-xl tabular-nums">{optimisticLikes}</p>
         </div>
         <BlogComments />
       </div>

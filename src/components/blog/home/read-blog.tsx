@@ -6,14 +6,18 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { H3, P } from "@/components/typography";
 import { GoHeartFill } from "react-icons/go";
-import { convertDate } from "@/lib/utils";
+import { cn, convertDate } from "@/lib/utils";
 import { getUserById } from "@/lib/data/user";
 
 interface ReadBlogProps {
   blog: BlogPosts;
+  type: "home" | "trending";
+  index?: number;
 }
 
 const ReadBlog = async ({
+  type,
+  index,
   blog: {
     authorId,
     title,
@@ -42,7 +46,10 @@ const ReadBlog = async ({
   return (
     <Link
       href={`/blog/${slug}`}
-      className="group flex justify-between gap-4 py-4"
+      className={cn(
+        "group flex justify-between gap-4 py-4",
+        type === "trending" && "flex-row-reverse",
+      )}
     >
       <div className="w-full">
         <div className="mb-2 flex w-full items-center gap-3">
@@ -59,12 +66,20 @@ const ReadBlog = async ({
         </div>
         <div className="space-y-3">
           <div className="space-y-2">
-            <H3 className="transition group-hover:text-primary">{title}</H3>
+            <H3 className="line-clamp-2 transition group-hover:text-primary">
+              {title}
+            </H3>
             <P className="line-clamp-2 [&:not(:first-child)]:mt-0">
               {description}
             </P>
           </div>
-          <div className="flex items-center gap-3">
+          <div
+            // className={cn(
+            //   "flex items-center gap-3",
+            //   type === "trending" && "hidden",
+            // )}
+            className="flex items-center gap-3"
+          >
             <Badge>{tags.at(0)}</Badge>
             <div className="flex items-center gap-1">
               <GoHeartFill className="h-5 w-5" />
@@ -73,13 +88,26 @@ const ReadBlog = async ({
           </div>
         </div>
       </div>
-      <div className="relative h-40 w-44 overflow-hidden rounded-md">
+      <div
+        className={cn(
+          "relative h-40 w-44 overflow-hidden rounded-md",
+          type === "trending" && "hidden",
+        )}
+      >
         <Image
           src={bannerImage}
           fill
           alt={title}
           className="absolute object-cover"
         />
+      </div>
+      <div
+        className={cn(
+          "flex h-40 w-28 justify-center overflow-hidden rounded-md text-6xl  font-medium text-muted-foreground",
+          type === "home" && "hidden",
+        )}
+      >
+        <p>0{index! + 1}</p>
       </div>
     </Link>
   );

@@ -4,11 +4,10 @@ import { H1 } from "@/components/typography";
 import prisma from "@/db/db";
 import { getUserById } from "@/lib/data/user";
 import { convertDate, getSessionUser } from "@/lib/utils";
-import { Activity } from "@prisma/client";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 
 interface BlogPageProps {
@@ -49,23 +48,21 @@ export const generateMetadata = async ({
 
 const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
   const blog = await getBlog(slug);
-
   const { authorId, title, bannerImage, content, createdAt, id } = blog;
 
-  const blogActivity = (await prisma.activity.findUnique({
-    where: {
-      blogPostId: id,
-    },
-  })) as Activity;
-
   const user = await getUserById(authorId!);
-
   const sessionUser = await getSessionUser();
   const disabled = sessionUser ? false : true;
 
+  const blogActivity = await prisma.activity.findUnique({
+    where: {
+      blogPostId: id,
+    },
+  });
+  if (!blogActivity) notFound();
+
   return (
     <>
-      {" "}
       <article className="space-y-10">
         <div className="relative h-96 w-full overflow-hidden rounded">
           <Image
@@ -103,7 +100,6 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
           blogActivity={blogActivity}
         />
         <RichTextEditor editable={false} content={content} />
-        {/* <BlogActivity /> */}
       </article>
     </>
   );
