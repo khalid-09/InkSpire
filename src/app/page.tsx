@@ -1,31 +1,48 @@
 import { Suspense } from "react";
 import prisma from "@/db/db";
-import { BlogPosts } from "@prisma/client";
 
 import ReadTrendingBlogs from "@/components/blog/home/read-trending-blogs";
 import ReadBlog from "@/components/blog/home/read-blog";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
+import TagSearch from "@/components/blog/home/tag-search";
 
-import { Badge } from "@/components/ui/badge";
 import { H1, H3, P } from "@/components/typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
 import { TrendingUp } from "lucide-react";
 
-const HomePage = async () => {
-  const blogs: BlogPosts[] = await prisma.blogPosts.findMany({
+interface HomePageProps {
+  searchParams: {
+    tag?: string;
+  };
+}
+
+const HomePage = async ({ searchParams: { tag } }: HomePageProps) => {
+  const blogsPromise = prisma.blogPosts.findMany({
     where: {
       draft: false,
+      ...(tag && {
+        tags: {
+          has: tag,
+        },
+      }),
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 
-  const trendingBlogs = await prisma.activity.findMany({
+  const trendingBlogsPromise = prisma.activity.findMany({
     orderBy: {
       totalLikes: "desc",
     },
     select: { blogPost: true },
     take: 5,
   });
+
+  const [blogs, trendingBlogs] = await Promise.all([
+    blogsPromise,
+    trendingBlogsPromise,
+  ]);
 
   return (
     <>
@@ -61,20 +78,8 @@ const HomePage = async () => {
           </Tabs>
         </div>
         <div className="w-full space-y-4 md:w-1/3">
-          <H3 className=" text-start">Stories from all interests</H3>
-          <div className="mb-20 flex flex-wrap gap-2">
-            {blogs.map((blog) =>
-              blog.tags.map((tag) => (
-                <Badge
-                  key={tag}
-                  variant="secondary"
-                  className="cursor-pointer px-3 py-2 text-sm transition hover:scale-105"
-                >
-                  {tag}
-                </Badge>
-              )),
-            )}
-          </div>
+          <H3 className="text-start font-medium">Stories from all interests</H3>
+          <TagSearch />
           <div className="hidden space-y-4 md:block">
             <H3 className="flex items-center gap-2">
               <span>Trending </span>

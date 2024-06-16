@@ -29,15 +29,20 @@ const ReadBlog = async ({
     id,
   },
 }: ReadBlogProps) => {
-  const user = await getUserById(authorId!);
-  if (!user) throw new Error("User not found");
+  const userPromise = getUserById(authorId!);
 
-  const blogActivity = await prisma.activity.findUnique({
+  const blogActivityPromise = prisma.activity.findUnique({
     where: {
       blogPostId: id,
     },
   });
 
+  const [user, blogActivity] = await Promise.all([
+    userPromise,
+    blogActivityPromise,
+  ]);
+
+  if (!user) throw new Error("User not found");
   if (!blogActivity)
     throw new Error("Trouble fetching blog activity, try again later!");
 

@@ -82,7 +82,7 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
         <H4>Preview</H4>
         <Cross1Icon className="h-6 w-6 cursor-pointer" onClick={handleClose} />
       </div>
-      <div className="flex flex-col gap-4 md:flex-row">
+      <div className="mb-4 flex flex-col gap-4 md:flex-row">
         <section className="flex w-full flex-1 flex-col space-y-4 md:w-3/5">
           <div className="relative h-96 overflow-hidden rounded-md">
             <Image
