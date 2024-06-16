@@ -3,9 +3,10 @@ import { getSessionUser } from "@/lib/utils";
 import { Inter } from "next/font/google";
 
 import { ModeToggle } from "../theme-toggle";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import TitleSearch from "../blog/home/title-search";
 import UserDropdown from "./user-dropdown";
+
+import { Button } from "../ui/button";
 import { TfiPencilAlt } from "react-icons/tfi";
 import {
   Tooltip,
@@ -18,7 +19,6 @@ import {
   MagnifyingGlassIcon,
   ShadowNoneIcon,
 } from "@radix-ui/react-icons";
-import TitleSearch from "../blog/home/title-search";
 
 const inter = Inter({ subsets: ["latin"] });
 

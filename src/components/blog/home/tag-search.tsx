@@ -16,7 +16,7 @@ const TagSearch = async () => {
   const uniqueTags = Array.from(new Set(tags.flatMap((tag) => tag.tags[0])));
 
   return (
-    <div className="mb-20 flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2">
       {uniqueTags.map((tag) => (
         <form action={filterBlogByTag} key={tag}>
           <input type="hidden" name="tag" value={tag} />
