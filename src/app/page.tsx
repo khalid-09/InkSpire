@@ -7,7 +7,7 @@ import ReadBlog from "@/components/blog/home/read-blog";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
 import TagSearch from "@/components/blog/home/tag-search";
 
-import { H1, H3 } from "@/components/typography";
+import { H1, H3, P } from "@/components/typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp } from "lucide-react";
 import Pagination from "@/components/blog/home/pagination";
@@ -73,7 +73,7 @@ const HomePage = async ({
   return (
     <>
       <section className="mt-5 flex flex-col items-start gap-10 md:flex-row">
-        <div className="w-full space-y-10 md:w-2/3">
+        <div className="w-full md:w-2/3">
           <Tabs defaultValue="home">
             <TabsList>
               <TabsTrigger value="home">
@@ -83,34 +83,43 @@ const HomePage = async ({
                 Trending Blogs
               </TabsTrigger>
             </TabsList>
-            <TabsContent className="space-y-4 divide-y-2" value="home">
-              <Suspense
-                fallback={Array.from({ length: 5 }).map((_, i) => (
-                  <HomeBlogSkeleton key={i} />
-                ))}
-              >
-                {blogs.map((blog) => (
-                  <ReadBlog type="home" key={blog.id} blog={blog} />
-                ))}
-              </Suspense>
+            <TabsContent className="space-y-10" value="home">
+              <div className="space-y-4 divide-y-2">
+                <Suspense
+                  fallback={Array.from({ length: 5 }).map((_, i) => (
+                    <HomeBlogSkeleton key={i} />
+                  ))}
+                >
+                  {blogs.map((blog) => (
+                    <ReadBlog type="home" key={blog.id} blog={blog} />
+                  ))}
+                </Suspense>
+              </div>
               {blogs.length === 0 && (
-                <H1 className="mt-10">
-                  No Blogs Found ;)
-                  <br /> Start writing some 🙂
-                </H1>
+                <div>
+                  <H1 className="mt-10">
+                    No Blogs Found ;)
+                    <br /> Start writing some 🙂
+                  </H1>
+                  {page ? (
+                    <P className="text-lg font-medium italic">
+                      or make sure you are on the right page 🤔
+                    </P>
+                  ) : null}
+                </div>
+              )}
+              {blogs.length > 0 && (
+                <Pagination
+                  currentPage={pageNumber}
+                  totalPages={Math.ceil(totalBlogs / BLOGS_PER_PAGE)}
+                  filterValues={filterValues}
+                />
               )}
             </TabsContent>
             <TabsContent value="trending">
               <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
             </TabsContent>
           </Tabs>
-          {blogs.length && (
-            <Pagination
-              currentPage={pageNumber}
-              totalPages={Math.ceil(totalBlogs / BLOGS_PER_PAGE)}
-              filterValues={filterValues}
-            />
-          )}
         </div>
         <aside className="w-full space-y-6 md:w-1/3">
           <div className="space-y-4">

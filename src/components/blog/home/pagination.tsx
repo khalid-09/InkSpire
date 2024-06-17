@@ -26,7 +26,7 @@ const Pagination = ({
   };
 
   return (
-    <div className="flex items-center justify-between">
+    <div className={`flex items-center justify-between`}>
       <Button asChild>
         <Link
           href={generatePageLink(currentPage - 1)}
@@ -39,7 +39,7 @@ const Pagination = ({
           <span>Previous Page</span>
         </Link>
       </Button>
-      <span>
+      <span className="font-semibold">
         Page {currentPage} of {totalPages}
       </span>
       <Button asChild>
