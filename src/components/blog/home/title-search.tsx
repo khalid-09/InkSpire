@@ -12,9 +12,9 @@ const TitleSearch = () => {
   const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);
     if (value) {
-      params.set("title", value);
+      params.set("query", value);
     } else {
-      params.delete("title");
+      params.delete("query");
     }
     replace(`${pathname}?${params.toString()}`);
   }, 300);

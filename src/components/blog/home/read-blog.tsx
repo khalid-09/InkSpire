@@ -78,13 +78,7 @@ const ReadBlog = async ({
               {description}
             </P>
           </div>
-          <div
-            // className={cn(
-            //   "flex items-center gap-3",
-            //   type === "trending" && "hidden",
-            // )}
-            className="flex items-center gap-3"
-          >
+          <div className="flex items-center gap-3">
             <Badge>{tags.at(0)}</Badge>
             <div className="flex items-center gap-1">
               <GoHeartFill className="h-5 w-5" />

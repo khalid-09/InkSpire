@@ -9,14 +9,17 @@ import TagSearch from "@/components/blog/home/tag-search";
 
 import { H1, H3, P } from "@/components/typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, User, UsersRound } from "lucide-react";
 import Pagination from "@/components/blog/home/pagination";
 import { BlogFilterSchema } from "@/lib/validation/blog-filter";
+import Image from "next/image";
+import Link from "next/link";
+import UserSearchResults from "@/components/blog/home/user-search-results";
 
 interface HomePageProps {
   searchParams: {
     tag?: string;
-    title?: string;
+    query?: string;
     page?: string;
   };
 }
@@ -24,9 +27,9 @@ interface HomePageProps {
 const BLOGS_PER_PAGE = 5;
 
 const HomePage = async ({
-  searchParams: { tag, title, page },
+  searchParams: { tag, query, page },
 }: HomePageProps) => {
-  const filterValues: BlogFilterSchema = { tag, title };
+  const filterValues: BlogFilterSchema = { tag, query };
   const pageNumber = page ? parseInt(page) : 1;
   const skip = (pageNumber - 1) * BLOGS_PER_PAGE;
 
@@ -37,9 +40,9 @@ const HomePage = async ({
         has: tag,
       },
     }),
-    ...(title && {
+    ...(query && {
       title: {
-        contains: title,
+        contains: query,
         mode: "insensitive",
       },
     }),
@@ -64,9 +67,36 @@ const HomePage = async ({
     take: 5,
   });
 
-  const [blogs, trendingBlogs, totalBlogs] = await Promise.all([
+  const usersPromise = query
+    ? prisma.user.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+            {
+              username: {
+                contains: query,
+                mode: "insensitive",
+              },
+            },
+          ],
+        },
+        select: {
+          name: true,
+          username: true,
+          image: true,
+        },
+      })
+    : Promise.resolve([]);
+
+  const [blogs, trendingBlogs, users, totalBlogs] = await Promise.all([
     blogsPromise,
     trendingBlogsPromise,
+    usersPromise,
     countPromise,
   ]);
 
@@ -118,24 +148,41 @@ const HomePage = async ({
             </TabsContent>
             <TabsContent value="trending">
               <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
+              {trendingBlogs.length === 0 && (
+                <div>
+                  <H1 className="mt-10">No blogs trending !🙂</H1>
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </div>
-        <aside className="w-full space-y-6 md:w-1/3">
-          <div className="space-y-4">
-            <H3 className="text-start font-medium">
-              Stories from all interests
+        {!users.length ? (
+          <aside className="w-full space-y-6 md:w-1/3">
+            <div className="space-y-4">
+              <H3 className="text-start font-medium">
+                Search by your interests!
+              </H3>
+              <TagSearch />
+            </div>
+            <div className="hidden space-y-4 md:block">
+              <H3 className="flex items-center gap-2">
+                <span className="font-semibold">Trending </span>
+                <TrendingUp />
+              </H3>
+              <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
+            </div>
+          </aside>
+        ) : (
+          <aside className="w-full space-y-6 md:w-1/3">
+            <H3 className="flex items-center gap-2 text-start font-medium">
+              <span>Users related to search</span>{" "}
+              <User className="text-muted-foreground" />
             </H3>
-            <TagSearch />
-          </div>
-          <div className="hidden space-y-4 md:block">
-            <H3 className="flex items-center gap-2">
-              <span>Trending </span>
-              <TrendingUp />
-            </H3>
-            <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
-          </div>
-        </aside>
+            {users.map((user) => (
+              <UserSearchResults key={user.username} user={user} />
+            ))}
+          </aside>
+        )}
       </section>
     </>
   );

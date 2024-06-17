@@ -13,12 +13,12 @@ interface PaginationProps {
 const Pagination = ({
   currentPage,
   totalPages,
-  filterValues: { tag, title },
+  filterValues: { tag, query },
 }: PaginationProps) => {
   const generatePageLink = (page: number) => {
     const searchParams = new URLSearchParams({
       ...(tag && { tag }),
-      ...(title && { title }),
+      ...(query && { query }),
       page: page.toString(),
     });
 
