@@ -107,7 +107,11 @@ const HomePage = async ({
           <Tabs defaultValue="home">
             <TabsList>
               <TabsTrigger value="home">
-                {tag ? tag : "Recently Published"}
+                {query && !users.length
+                  ? 'Search results for "' + query + '"'
+                  : tag
+                    ? tag
+                    : "Recently Published"}
               </TabsTrigger>
               <TabsTrigger className="block  md:hidden" value="trending">
                 Trending Blogs
