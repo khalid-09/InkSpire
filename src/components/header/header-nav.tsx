@@ -34,7 +34,6 @@ const HeaderNav = async () => {
         <div className=" flex w-full max-w-6xl items-center justify-between gap-2 px-2">
           <div className="relative flex items-center gap-2 md:gap-4">
             <TitleSearch />
-            <MagnifyingGlassIcon className="absolute left-2 top-[9px] hidden h-4 w-4 text-sm md:block" />
           </div>
           <div className="flex items-center gap-2 md:gap-3">
             {user ? (

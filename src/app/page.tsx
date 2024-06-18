@@ -1,20 +1,19 @@
-import { Suspense } from "react";
 import prisma from "@/db/db";
 import { Prisma } from "@prisma/client";
+import { BlogFilterSchema } from "@/lib/validation/blog-filter";
+import { Suspense } from "react";
 
 import ReadTrendingBlogs from "@/components/blog/home/read-trending-blogs";
 import ReadBlog from "@/components/blog/home/read-blog";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
 import TagSearch from "@/components/blog/home/tag-search";
+import UserSearchResults from "@/components/blog/home/user-search-results";
+import Pagination from "@/components/blog/home/pagination";
 
 import { H1, H3, P } from "@/components/typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { TrendingUp, User, UsersRound } from "lucide-react";
-import Pagination from "@/components/blog/home/pagination";
-import { BlogFilterSchema } from "@/lib/validation/blog-filter";
-import Image from "next/image";
-import Link from "next/link";
-import UserSearchResults from "@/components/blog/home/user-search-results";
+import { TrendingUp, User } from "lucide-react";
+import { BLOGS_PER_PAGE } from "@/lib/constants";
 
 interface HomePageProps {
   searchParams: {
@@ -23,8 +22,6 @@ interface HomePageProps {
     page?: string;
   };
 }
-
-const BLOGS_PER_PAGE = 5;
 
 const HomePage = async ({
   searchParams: { tag, query, page },
