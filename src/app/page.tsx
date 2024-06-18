@@ -99,10 +99,10 @@ const HomePage = async ({
 
   return (
     <>
-      <section className="mt-5 flex flex-col items-start gap-10 md:flex-row">
+      <section className="mb-10 mt-5 flex flex-col-reverse items-start gap-10 md:flex-row">
         <div className="w-full md:w-2/3">
           <Tabs defaultValue="home">
-            <TabsList>
+            <TabsList className="flex-wrap">
               <TabsTrigger value="home">
                 {query && !users.length
                   ? 'Search results for "' + query + '"'

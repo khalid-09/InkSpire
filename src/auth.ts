@@ -16,6 +16,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           username,
         },
       });
+      await prisma.socialLinks.create({
+        data: {
+          userSocialLinkId: user.id!,
+        },
+      });
     },
   },
   callbacks: {

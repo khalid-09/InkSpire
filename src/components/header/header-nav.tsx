@@ -19,6 +19,7 @@ import {
   MagnifyingGlassIcon,
   ShadowNoneIcon,
 } from "@radix-ui/react-icons";
+import { Hop } from "lucide-react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +30,7 @@ const HeaderNav = async () => {
     <header className="border-b border-muted/50 ">
       <nav className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-6">
         <Link href="/">
-          <ShadowNoneIcon className="h-8 w-9" />
+          <Hop className="h-8 w-9" />
         </Link>
         <div className=" flex w-full max-w-6xl items-center justify-between gap-2 px-2">
           <div className="relative flex items-center gap-2 md:gap-4">

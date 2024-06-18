@@ -61,12 +61,18 @@ export const signupUser = async (values: SignupSchema) => {
 
   const username = await generateUsername(email);
 
-  await prisma.user.create({
+  const createdUser = await prisma.user.create({
     data: {
       name,
       email,
       password: hashedPassword,
       username,
+    },
+  });
+
+  await prisma.socialLinks.create({
+    data: {
+      userSocialLinkId: createdUser.id,
     },
   });
 

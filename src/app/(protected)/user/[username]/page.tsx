@@ -15,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { BLOGS_PER_PAGE } from "@/lib/constants";
 import { loadMoreBlogs } from "@/actions/tag";
 import FormSubmitButton from "@/components/form-submit-button";
+import SocialIcons from "@/components/user/social-icons";
 
 interface UserProfileProps {
   params: {
@@ -58,6 +59,7 @@ const UserProfile = async ({
   const userPromise = prisma.user.findUnique({
     where: { username },
     include: {
+      socialLinks: true,
       blogPosts: {
         orderBy: {
           createdAt: "desc",
@@ -74,8 +76,17 @@ const UserProfile = async ({
   ]);
   if (!user) notFound();
 
-  const { blogPosts, image, bio, name, totalPosts, totalReads, id, createdAt } =
-    user;
+  const {
+    socialLinks,
+    blogPosts,
+    image,
+    bio,
+    name,
+    totalPosts,
+    totalReads,
+    id,
+    createdAt,
+  } = user;
 
   const totalBlogs = await prisma.blogPosts.count({
     where: { authorId: id },
@@ -83,6 +94,8 @@ const UserProfile = async ({
   const hasMore = totalBlogs > currentPage * BLOGS_PER_PAGE;
 
   const loadMoreBlogsForUsername = loadMoreBlogs.bind(null, username);
+
+  console.log(user.socialLinks);
 
   return (
     <section className="my-5  flex flex-col-reverse gap-10 md:flex-row">
@@ -106,7 +119,8 @@ const UserProfile = async ({
           {blogPosts.length === 0 && (
             <div>
               <H1 className="mt-10">
-                {username} has not published any blogs yet.
+                <span className="italic text-muted-foreground">{username}</span>{" "}
+                has not published any blogs yet.
               </H1>
             </div>
           )}
@@ -141,6 +155,7 @@ const UserProfile = async ({
         </TabsContent>
         <TabsContent value="about">
           <P className="">{bio || "Nothing to read here."}</P>
+          <SocialIcons socialLinks={socialLinks} />
           <P className="text-muted-foreground ">
             Joined on {convertDate(createdAt, "dd MMMM yyyy")}
           </P>
@@ -169,7 +184,8 @@ const UserProfile = async ({
           </div>
         )}
         <P className="hidden md:block">{bio || "Nothing to read here."}</P>
-        <P className="hidden text-muted-foreground md:block">
+        <SocialIcons socialLinks={socialLinks} />
+        <P className="hidden text-muted-foreground md:block [&:not(:first-child)]:mt-0">
           Joined on {convertDate(createdAt, "dd MMMM yyyy")}
         </P>
         <Separator className="w-full" />
