@@ -1,6 +1,8 @@
 import RichTextEditor from "@/components/blog/editor/rich-text-editor";
 import BlogActivity from "@/components/blog/home/blog-activity";
-import { H1 } from "@/components/typography";
+import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
+import ReadBlog from "@/components/blog/home/read-blog";
+import { H1, H2, H3 } from "@/components/typography";
 import prisma from "@/db/db";
 import { getUserById } from "@/lib/data/user";
 import { convertDate, getSessionUser } from "@/lib/utils";
@@ -8,7 +10,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { cache } from "react";
+import { Suspense, cache } from "react";
 
 interface BlogPageProps {
   params: {
@@ -49,18 +51,40 @@ export const generateMetadata = async ({
 
 const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
   const blog = await getBlog(slug);
-  const { authorId, title, bannerImage, content, createdAt, id } = blog;
+  const { authorId, title, bannerImage, content, createdAt, id, tags } = blog;
 
-  const user = await getUserById(authorId!);
-  const sessionUser = await getSessionUser();
-  const disabled = sessionUser ? false : true;
+  const userPromise = getUserById(authorId!);
+  const sessionUserPromise = getSessionUser();
 
-  const blogActivity = await prisma.activity.findUnique({
+  const blogActivityPromise = prisma.activity.findUnique({
     where: {
       blogPostId: id,
     },
   });
+
+  const similarBlogsPromise = prisma.blogPosts.findMany({
+    where: {
+      tags: {
+        hasSome: tags,
+      },
+      NOT: {
+        id,
+      },
+    },
+    take: 2,
+  });
+
+  const [user, sessionUser, blogActivity, similarBlogs] = await Promise.all([
+    userPromise,
+    sessionUserPromise,
+    blogActivityPromise,
+    similarBlogsPromise,
+  ]);
+
   if (!blogActivity) notFound();
+  const disabled = sessionUser ? false : true;
+
+  console.log(similarBlogs);
 
   return (
     <>
@@ -102,6 +126,18 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
         />
         <RichTextEditor editable={false} content={content} />
       </article>
+      <H2 className="mb-2 mt-0">Similar Blogs</H2>
+      <div className="mb-10 space-y-4 divide-y-2">
+        <Suspense
+          fallback={Array.from({ length: 2 }).map((_, i) => (
+            <HomeBlogSkeleton key={i} />
+          ))}
+        >
+          {similarBlogs.map((blog) => (
+            <ReadBlog type="home" key={blog.id} blog={blog} />
+          ))}
+        </Suspense>
+      </div>
     </>
   );
 };

@@ -23,7 +23,6 @@ const TitleSearch = () => {
 
   return (
     <div className={cn("", pathname !== "/" && "invisible")}>
-      {" "}
       <Input
         className="text-base md:px-7"
         placeholder="Search..."
