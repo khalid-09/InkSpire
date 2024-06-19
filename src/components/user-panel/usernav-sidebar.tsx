@@ -18,7 +18,7 @@ const UserNavSideBar = () => {
     "transition transition-all font-semibold border-muted-foreground border-r-2";
 
   return (
-    <aside className="h-full w-full flex-1 md:w-[20%]">
+    <aside className="hidden h-full w-full flex-1 md:block md:w-[20%]">
       <div className="mt-10 h-2/6">
         <H3 className="mb-12">Dashboard</H3>
         <div className="space-y-7">

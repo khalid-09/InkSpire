@@ -11,7 +11,7 @@ const UserPanelLayout = async ({
   if (!user) redirect("/login");
 
   return (
-    <section className="flex h-[calc(100dvh-130px)] flex-col md:flex-row">
+    <section className="flex min-h-dvh flex-col md:flex-row">
       <UserNavSideBar />
       <div className="mt-10 w-full md:w-[80%]">{children}</div>
     </section>
