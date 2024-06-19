@@ -48,7 +48,7 @@ const HomePage = async ({
   const blogsPromise = prisma.blogPosts.findMany({
     where,
     orderBy: {
-      createdAt: "desc",
+      id: "desc",
     },
     take: BLOGS_PER_PAGE,
     skip,
@@ -57,9 +57,7 @@ const HomePage = async ({
   const countPromise = prisma.blogPosts.count({ where });
 
   const trendingBlogsPromise = prisma.activity.findMany({
-    orderBy: {
-      totalLikes: "desc",
-    },
+    orderBy: [{ totalLikes: "desc" }, { totalReads: "desc" }],
     select: { blogPost: true },
     take: 5,
   });

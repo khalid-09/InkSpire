@@ -74,17 +74,39 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
     take: 2,
   });
 
+  const increaseReads = prisma.activity.update({
+    where: {
+      blogPostId: id,
+    },
+    data: {
+      totalReads: {
+        increment: 1,
+      },
+    },
+  });
+
+  const increaseUserReads = prisma.user.update({
+    where: {
+      id: authorId!,
+    },
+    data: {
+      totalReads: {
+        increment: 1,
+      },
+    },
+  });
+
   const [user, sessionUser, blogActivity, similarBlogs] = await Promise.all([
     userPromise,
     sessionUserPromise,
     blogActivityPromise,
     similarBlogsPromise,
+    increaseReads,
+    increaseUserReads,
   ]);
 
   if (!blogActivity) notFound();
   const disabled = sessionUser ? false : true;
-
-  console.log(similarBlogs);
 
   return (
     <>
@@ -126,18 +148,22 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
         />
         <RichTextEditor editable={false} content={content} />
       </article>
-      <H2 className="mb-2 mt-0">Similar Blogs</H2>
-      <div className="mb-10 space-y-4 divide-y-2">
-        <Suspense
-          fallback={Array.from({ length: 2 }).map((_, i) => (
-            <HomeBlogSkeleton key={i} />
-          ))}
-        >
-          {similarBlogs.map((blog) => (
-            <ReadBlog type="home" key={blog.id} blog={blog} />
-          ))}
-        </Suspense>
-      </div>
+      {similarBlogs.length > 0 && (
+        <>
+          <H2 className="mb-2 mt-0">Similar Blogs</H2>
+          <div className="mb-10 space-y-4 divide-y-2">
+            <Suspense
+              fallback={Array.from({ length: 2 }).map((_, i) => (
+                <HomeBlogSkeleton key={i} />
+              ))}
+            >
+              {similarBlogs.map((blog) => (
+                <ReadBlog type="home" key={blog.id} blog={blog} />
+              ))}
+            </Suspense>
+          </div>
+        </>
+      )}
     </>
   );
 };

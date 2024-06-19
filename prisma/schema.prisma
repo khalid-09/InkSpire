@@ -29,6 +29,7 @@ model User {
   socialLinks SocialLinks[]
   blogPosts   BlogPosts[]
   likes       Like[]
+  // reads       Reads[]
   // comments    Comments[]
   // notifications Notifications[] @relation("UserNotifications")
 
@@ -103,6 +104,7 @@ model BlogPosts {
 
   activity Activity[]
   likes    Like[]
+  // reads    Reads[]
   // comments       Comments[] @relation("BlogComments")
   // commentsAuthor Comments[] @relation("BlogAuthorComments")
   // notifications  Notifications[] @relation("BlogNotifications")
@@ -137,6 +139,18 @@ model Activity {
 
   @@map("activity")
 }
+
+// model Reads {
+//   id         String @id @default(auto()) @map("_id") @db.ObjectId
+//   blogPostId String @db.ObjectId
+//   userId     String @db.ObjectId
+
+//   blogPost BlogPosts @relation(fields: [blogPostId], references: [id])
+//   user     User      @relation(fields: [userId], references: [id])
+
+//   @@unique([userId, blogPostId])
+//   @@map("reads")
+// }
 
 // model Comments {
 //   id String @id @default(auto()) @map("_id") @db.ObjectId

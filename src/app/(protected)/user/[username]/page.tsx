@@ -62,7 +62,7 @@ const UserProfile = async ({
       socialLinks: true,
       blogPosts: {
         orderBy: {
-          createdAt: "desc",
+          id: "desc",
         },
         skip,
         take: BLOGS_PER_PAGE,
@@ -94,8 +94,6 @@ const UserProfile = async ({
   const hasMore = totalBlogs > currentPage * BLOGS_PER_PAGE;
 
   const loadMoreBlogsForUsername = loadMoreBlogs.bind(null, username);
-
-  console.log(user.socialLinks);
 
   return (
     <section className="my-5  flex flex-col-reverse gap-10 md:flex-row">
