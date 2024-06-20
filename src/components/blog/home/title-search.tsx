@@ -13,17 +13,24 @@ interface TitleSearchProps {
 const TitleSearch = ({ location }: TitleSearchProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const { replace, push } = useRouter();
 
   const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);
+    const currentQuery = searchParams.get("query") || "";
+    if (value !== currentQuery) {
+      params.set("page", "1");
+    }
+
     if (value) {
       params.set("query", value);
     } else {
       params.delete("query");
     }
 
-    replace(`${pathname}?${params.toString()}`);
+    // replace(`${pathname}?${params.toString()}`);
+    const newQuery = params.toString();
+    push(`${pathname}?${newQuery}`, undefined);
   }, 300);
 
   const isVisible =

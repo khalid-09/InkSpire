@@ -130,11 +130,11 @@ const DashboardBlogPage = async ({
             {publishedBlogs.length === 0 && (
               <div>
                 <H4>No Blogs Published 😅. Start Writing!</H4>
-                {page ? (
+                {/* {page ? (
                   <P className="text-lg font-medium italic">
                     or make sure you are on the right page 🤔
                   </P>
-                ) : null}
+                ) : null} */}
               </div>
             )}
             {hasMorePublishedBlogs && (

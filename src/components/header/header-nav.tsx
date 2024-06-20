@@ -14,11 +14,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  BellIcon,
-  MagnifyingGlassIcon,
-  ShadowNoneIcon,
-} from "@radix-ui/react-icons";
+import { BellIcon } from "@radix-ui/react-icons";
 import { Hop } from "lucide-react";
 
 const inter = Inter({ subsets: ["latin"] });
