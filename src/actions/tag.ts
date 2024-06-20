@@ -15,3 +15,10 @@ export const loadMoreBlogs = (username: string, formData: FormData) => {
 
   redirect(`/user/${username}?page=${page.toString()}`);
 };
+
+export const loadMoreBlogsInDashboard = (formData: FormData) => {
+  const page = formData.get("page");
+  if (!page) throw new Error("Page is required");
+
+  redirect(`/dashboard/blogs?page=${page.toString()}`);
+};

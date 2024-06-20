@@ -16,6 +16,7 @@ import { BLOGS_PER_PAGE } from "@/lib/constants";
 import { loadMoreBlogs } from "@/actions/tag";
 import FormSubmitButton from "@/components/form-submit-button";
 import SocialIcons from "@/components/user/social-icons";
+import PaginateButton from "@/components/dashboard/blogs/paginate-btn";
 
 interface UserProfileProps {
   params: {
@@ -123,32 +124,20 @@ const UserProfile = async ({
             </div>
           )}
           {hasMore && (
-            <form
-              className="flex w-full justify-end"
+            <PaginateButton
               action={loadMoreBlogsForUsername}
+              value={currentPage + 1}
             >
-              <input type="hidden" name="page" value={currentPage + 1} />
-              <FormSubmitButton
-                type="submit"
-                className="mt-4 px-3 py-2 text-sm transition hover:scale-105"
-              >
-                Show More
-              </FormSubmitButton>
-            </form>
+              Show More
+            </PaginateButton>
           )}
           {currentPage > 1 && blogPosts.length > 0 && (
-            <form
-              className="flex w-full justify-end"
+            <PaginateButton
               action={loadMoreBlogsForUsername}
+              value={currentPage - 1}
             >
-              <input type="hidden" name="page" value={currentPage - 1} />
-              <FormSubmitButton
-                type="submit"
-                className="mt-4 px-3 py-2 text-sm transition hover:scale-105"
-              >
-                Show Less
-              </FormSubmitButton>
-            </form>
+              Show Less
+            </PaginateButton>
           )}
         </TabsContent>
         <TabsContent value="about">
