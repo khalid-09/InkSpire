@@ -12,6 +12,7 @@ import { BLOGS_PER_PAGE } from "@/lib/constants";
 import FormSubmitButton from "@/components/form-submit-button";
 import { loadMoreBlogsInDashboard } from "@/actions/tag";
 import PaginateButton from "@/components/dashboard/blogs/paginate-btn";
+import TitleSearch from "@/components/blog/home/title-search";
 
 export const generateMetadata = (): Metadata => {
   return {
@@ -23,11 +24,12 @@ export const generateMetadata = (): Metadata => {
 interface DashboardBlogPageProps {
   searchParams: {
     page?: string;
+    query?: string;
   };
 }
 
 const DashboardBlogPage = async ({
-  searchParams: { page },
+  searchParams: { page, query },
 }: DashboardBlogPageProps) => {
   const sessionUser = await getSessionUser();
   if (!sessionUser) redirect("/login");
@@ -39,6 +41,12 @@ const DashboardBlogPage = async ({
     where: {
       draft: false,
       authorId: sessionUser.id,
+      ...(query && {
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+      }),
     },
     orderBy: {
       id: "desc",
@@ -53,6 +61,13 @@ const DashboardBlogPage = async ({
   const totalBlogsPromise = prisma.blogPosts.count({
     where: {
       authorId: sessionUser.id,
+      draft: false,
+      ...(query && {
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+      }),
     },
   });
 
@@ -60,22 +75,51 @@ const DashboardBlogPage = async ({
     where: {
       draft: true,
       id: sessionUser.id,
+      ...(query && {
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+      }),
+    },
+    orderBy: {
+      id: "desc",
+    },
+    skip,
+    take: BLOGS_PER_PAGE,
+  });
+
+  const totalDraftBlogsPromise = prisma.blogPosts.count({
+    where: {
+      authorId: sessionUser.id,
+      draft: true,
+      ...(query && {
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+      }),
     },
   });
 
-  const [publishedBlogs, draftBlogs, totalBlogs] = await Promise.all([
-    publishedBlogsPromise,
-    darftBlogsPromise,
-    totalBlogsPromise,
-  ]);
+  const [publishedBlogs, draftBlogs, totalBlogs, totalDraftBlogs] =
+    await Promise.all([
+      publishedBlogsPromise,
+      darftBlogsPromise,
+      totalBlogsPromise,
+      totalDraftBlogsPromise,
+    ]);
 
   const hasMorePublishedBlogs = totalBlogs > currentPage * BLOGS_PER_PAGE;
+  const hasMoreDraftBlogs = totalDraftBlogs > currentPage * BLOGS_PER_PAGE;
 
   return (
-    <>
+    <div className="mb-4">
       <H4>Manage Blogs</H4>
       <div className="mt-8 space-y-5 md:p-4">
-        <Input className="w-full" placeholder="Search Blogs" />
+        <div className="relative">
+          <TitleSearch location="dashboard" />
+        </div>
         <Tabs defaultValue="published">
           <TabsList>
             <TabsTrigger value="published">Published Blogs</TabsTrigger>
@@ -105,10 +149,28 @@ const DashboardBlogPage = async ({
               </PaginateButton>
             )}
           </TabsContent>
-          <TabsContent value="drafts">Drafts</TabsContent>
+          <TabsContent value="drafts">
+            {draftBlogs.length === 0 && <H4>No Draft Blogs 👍</H4>}
+            {hasMoreDraftBlogs && (
+              <PaginateButton
+                action={loadMoreBlogsInDashboard}
+                value={currentPage + 1}
+              >
+                Show More
+              </PaginateButton>
+            )}
+            {currentPage > 1 && draftBlogs.length > 0 && (
+              <PaginateButton
+                action={loadMoreBlogsInDashboard}
+                value={currentPage - 1}
+              >
+                Show Less
+              </PaginateButton>
+            )}
+          </TabsContent>
         </Tabs>
       </div>
-    </>
+    </div>
   );
 };
 

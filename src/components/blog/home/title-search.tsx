@@ -6,7 +6,11 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useDebouncedCallback } from "use-debounce";
 
-const TitleSearch = () => {
+interface TitleSearchProps {
+  location: string;
+}
+
+const TitleSearch = ({ location }: TitleSearchProps) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
@@ -21,8 +25,12 @@ const TitleSearch = () => {
     replace(`${pathname}?${params.toString()}`);
   }, 300);
 
+  const isVisible =
+    (location === "dashboard" && pathname === "/dashboard/blogs") ||
+    (location === "homepage" && pathname === "/");
+
   return (
-    <div className={cn("", pathname !== "/" && "invisible")}>
+    <div className={cn("", !isVisible && "invisible")}>
       <Input
         className="text-base md:px-7"
         placeholder="Search..."

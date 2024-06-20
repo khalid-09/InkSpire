@@ -33,8 +33,8 @@ const HeaderNav = async () => {
           <Hop className="h-8 w-9" />
         </Link>
         <div className=" flex w-full max-w-6xl items-center justify-between gap-2 px-2">
-          <div className="relative flex items-center gap-2 md:gap-4">
-            <TitleSearch />
+          <div className="relative">
+            <TitleSearch location="homepage" />
           </div>
           <div className="flex items-center gap-2 md:gap-3">
             {user ? (

@@ -1,5 +1,4 @@
 import prisma from "@/db/db";
-import dynamic from "next/dynamic";
 import TagList from "./tag-list";
 
 const TagSearch = async () => {
