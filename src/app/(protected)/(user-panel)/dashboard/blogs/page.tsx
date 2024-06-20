@@ -6,12 +6,12 @@ import { Metadata } from "next";
 
 import PaginateButton from "@/components/dashboard/blogs/paginate-btn";
 import TitleSearch from "@/components/blog/home/title-search";
+import ReadBlog from "@/components/blog/home/read-blog";
 import PublishedBlogs from "@/components/dashboard/blogs/published-blogs";
 
-import { H4, P } from "@/components/typography";
+import { H4 } from "@/components/typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BLOGS_PER_PAGE } from "@/lib/constants";
-import ReadBlog from "@/components/blog/home/read-blog";
 
 export const generateMetadata = (): Metadata => {
   return {
@@ -123,7 +123,6 @@ const DashboardBlogPage = async ({
 
   const hasMorePublishedBlogs = totalBlogs > currentPage * BLOGS_PER_PAGE;
   const hasMoreDraftBlogs = totalDraftBlogs > currentPage * BLOGS_PER_PAGE;
-
   const [{ likes }] = favBlogs;
 
   return (
@@ -142,6 +141,7 @@ const DashboardBlogPage = async ({
           <TabsContent value="published" className="space-y-4  divide-y-2">
             {publishedBlogs.map((blog) => (
               <PublishedBlogs key={blog.id} blog={blog} />
+              // <DashboardBlogsSkeleton key={blog.id} />
             ))}
             {publishedBlogs.length === 0 && (
               <div>
