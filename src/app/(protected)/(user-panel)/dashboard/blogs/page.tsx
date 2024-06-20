@@ -11,6 +11,7 @@ import PublishedBlogs from "@/components/dashboard/blogs/published-blogs";
 import { H4, P } from "@/components/typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BLOGS_PER_PAGE } from "@/lib/constants";
+import ReadBlog from "@/components/blog/home/read-blog";
 
 export const generateMetadata = (): Metadata => {
   return {
@@ -59,7 +60,7 @@ const DashboardBlogPage = async ({
   const darftBlogsPromise = prisma.blogPosts.findMany({
     where: {
       draft: true,
-      id: sessionUser.id!,
+      authorId: sessionUser.id,
       ...(query && {
         title: {
           contains: query,
@@ -100,16 +101,30 @@ const DashboardBlogPage = async ({
     },
   });
 
-  const [publishedBlogs, draftBlogs, totalBlogs, totalDraftBlogs] =
+  const favBlogsPromise = prisma.user.findMany({
+    where: {
+      id: sessionUser.id,
+    },
+    select: {
+      likes: {
+        select: { blogPost: true },
+      },
+    },
+  });
+
+  const [publishedBlogs, draftBlogs, totalBlogs, totalDraftBlogs, favBlogs] =
     await Promise.all([
       publishedBlogsPromise,
       darftBlogsPromise,
       totalBlogsPromise,
       totalDraftBlogsPromise,
+      favBlogsPromise,
     ]);
 
   const hasMorePublishedBlogs = totalBlogs > currentPage * BLOGS_PER_PAGE;
   const hasMoreDraftBlogs = totalDraftBlogs > currentPage * BLOGS_PER_PAGE;
+
+  const [{ likes }] = favBlogs;
 
   return (
     <div className="mb-4">
@@ -122,6 +137,7 @@ const DashboardBlogPage = async ({
           <TabsList>
             <TabsTrigger value="published">Published Blogs</TabsTrigger>
             <TabsTrigger value="drafts">Drafts</TabsTrigger>
+            <TabsTrigger value="fav">Favourites</TabsTrigger>
           </TabsList>
           <TabsContent value="published" className="space-y-4  divide-y-2">
             {publishedBlogs.map((blog) => (
@@ -130,11 +146,6 @@ const DashboardBlogPage = async ({
             {publishedBlogs.length === 0 && (
               <div>
                 <H4>No Blogs Published 😅. Start Writing!</H4>
-                {/* {page ? (
-                  <P className="text-lg font-medium italic">
-                    or make sure you are on the right page 🤔
-                  </P>
-                ) : null} */}
               </div>
             )}
             {hasMorePublishedBlogs && (
@@ -156,12 +167,7 @@ const DashboardBlogPage = async ({
           </TabsContent>
           <TabsContent value="drafts">
             <div>
-              <H4>No Blogs Published 😅. Start Writing!</H4>
-              {page ? (
-                <P className="text-lg font-medium italic">
-                  or make sure you are on the right page 🤔
-                </P>
-              ) : null}
+              <H4>No Draft Blogs 😅. Start Writing!</H4>
             </div>
             {hasMoreDraftBlogs && (
               <PaginateButton
@@ -179,6 +185,16 @@ const DashboardBlogPage = async ({
                 Show Less
               </PaginateButton>
             )}
+          </TabsContent>
+          <TabsContent value="fav">
+            {likes.length === 0 && (
+              <div>
+                <H4>No Favourites 😅. Start Liking!</H4>
+              </div>
+            )}
+            {likes.map(({ blogPost }) => (
+              <ReadBlog type="home" blog={blogPost} key={blogPost.id} />
+            ))}
           </TabsContent>
         </Tabs>
       </div>

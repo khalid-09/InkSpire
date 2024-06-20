@@ -12,22 +12,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Loader2 } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
 interface DeleteBlogProps {
   id: string;
   activityId: string;
+  authorId: string;
 }
 
-const DeleteBlog = ({ id, activityId }: DeleteBlogProps) => {
+const DeleteBlog = ({ id, activityId, authorId }: DeleteBlogProps) => {
   const [isPending, startTransition] = useTransition();
 
   const handleDelete = () => {
     startTransition(async () => {
       try {
-        toast.promise(deleteBlog(id, activityId), {
+        toast.promise(deleteBlog(id, activityId, authorId), {
           loading: "Deleting blog...",
           success: () => {
             return "Blog deleted successfully!";

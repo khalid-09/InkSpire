@@ -95,18 +95,11 @@ export const createBlog = async (blog: BlogSchema) => {
   redirect("/");
 };
 
-export const deleteBlog = async (id: string, activityId: string) => {
-  const user = await getSessionUser();
-
-  if (!user)
-    return {
-      message: "User not found, Login or SignUp to continue!",
-      reason: "User not found",
-      type: "error",
-    };
-
-  const { id: authorId } = user;
-
+export const deleteBlog = async (
+  id: string,
+  activityId: string,
+  authorId: string,
+) => {
   await prisma.blogPosts.delete({
     where: {
       id,
