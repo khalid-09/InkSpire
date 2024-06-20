@@ -48,7 +48,7 @@ const UserNavSideBar = () => {
           </Link>
         </div>
       </div>
-      <div className="h-4/6">
+      <div className="mt-20 h-4/6">
         <H3 className="mb-12">Settings</H3>
         <div className="space-y-7">
           <Link

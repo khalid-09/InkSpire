@@ -1,5 +1,6 @@
 import prisma from "@/db/db";
 import TagList from "./tag-list";
+import { P } from "@/components/typography";
 
 const TagSearch = async () => {
   const tags = await prisma.blogPosts.findMany({
@@ -16,6 +17,9 @@ const TagSearch = async () => {
   return (
     <div>
       <TagList tags={uniqueTags!} />
+      {tags.length === 0 && (
+        <P className="[&:not(:first-child)]:mt-0">No interests found</P>
+      )}
     </div>
   );
 };

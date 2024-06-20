@@ -1,18 +1,16 @@
 import prisma from "@/db/db";
 import { getSessionUser } from "@/lib/utils";
 import { redirect } from "next/navigation";
-
-import PublishedBlogs from "@/components/dashboard/blogs/published-blogs";
-
-import { H4 } from "@/components/typography";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Metadata } from "next";
-import { BLOGS_PER_PAGE } from "@/lib/constants";
-import FormSubmitButton from "@/components/form-submit-button";
 import { loadMoreBlogsInDashboard } from "@/actions/tag";
+import { Metadata } from "next";
+
 import PaginateButton from "@/components/dashboard/blogs/paginate-btn";
 import TitleSearch from "@/components/blog/home/title-search";
+import PublishedBlogs from "@/components/dashboard/blogs/published-blogs";
+
+import { H4, P } from "@/components/typography";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BLOGS_PER_PAGE } from "@/lib/constants";
 
 export const generateMetadata = (): Metadata => {
   return {
@@ -58,23 +56,10 @@ const DashboardBlogPage = async ({
     take: BLOGS_PER_PAGE,
   });
 
-  const totalBlogsPromise = prisma.blogPosts.count({
-    where: {
-      authorId: sessionUser.id,
-      draft: false,
-      ...(query && {
-        title: {
-          contains: query,
-          mode: "insensitive",
-        },
-      }),
-    },
-  });
-
   const darftBlogsPromise = prisma.blogPosts.findMany({
     where: {
       draft: true,
-      id: sessionUser.id,
+      id: sessionUser.id!,
       ...(query && {
         title: {
           contains: query,
@@ -87,6 +72,19 @@ const DashboardBlogPage = async ({
     },
     skip,
     take: BLOGS_PER_PAGE,
+  });
+
+  const totalBlogsPromise = prisma.blogPosts.count({
+    where: {
+      authorId: sessionUser.id,
+      draft: false,
+      ...(query && {
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+      }),
+    },
   });
 
   const totalDraftBlogsPromise = prisma.blogPosts.count({
@@ -130,7 +128,14 @@ const DashboardBlogPage = async ({
               <PublishedBlogs key={blog.id} blog={blog} />
             ))}
             {publishedBlogs.length === 0 && (
-              <H4>No Blogs Published 😅. Start Writing!</H4>
+              <div>
+                <H4>No Blogs Published 😅. Start Writing!</H4>
+                {page ? (
+                  <P className="text-lg font-medium italic">
+                    or make sure you are on the right page 🤔
+                  </P>
+                ) : null}
+              </div>
             )}
             {hasMorePublishedBlogs && (
               <PaginateButton
@@ -150,7 +155,14 @@ const DashboardBlogPage = async ({
             )}
           </TabsContent>
           <TabsContent value="drafts">
-            {draftBlogs.length === 0 && <H4>No Draft Blogs 👍</H4>}
+            <div>
+              <H4>No Blogs Published 😅. Start Writing!</H4>
+              {page ? (
+                <P className="text-lg font-medium italic">
+                  or make sure you are on the right page 🤔
+                </P>
+              ) : null}
+            </div>
             {hasMoreDraftBlogs && (
               <PaginateButton
                 action={loadMoreBlogsInDashboard}

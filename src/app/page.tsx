@@ -169,6 +169,11 @@ const HomePage = async ({
                 <TrendingUp />
               </H3>
               <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
+              {trendingBlogs.length === 0 && (
+                <div>
+                  <H1 className="mt-10">No blogs trending !🙂</H1>
+                </div>
+              )}
             </div>
           </aside>
         ) : (

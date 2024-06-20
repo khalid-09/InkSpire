@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { convertDate } from "@/lib/utils";
 import { Activity, BlogPosts } from "@prisma/client";
 import Image from "next/image";
+import DeleteBlog from "./delete-blog";
 
 type activity = {
   activity: Activity[];
@@ -32,7 +33,7 @@ const PublishedBlogs = ({ blog }: PublishedBlogsProps) => {
             <Button className="flex-grow-0" variant="outline">
               Edit
             </Button>
-            <Button>Delete</Button>
+            <DeleteBlog id={blog.id} activityId={blog.activity[0].id} />
           </div>
         </div>
       </div>

@@ -22,6 +22,7 @@ const TitleSearch = ({ location }: TitleSearchProps) => {
     } else {
       params.delete("query");
     }
+
     replace(`${pathname}?${params.toString()}`);
   }, 300);
 

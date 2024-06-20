@@ -94,3 +94,42 @@ export const createBlog = async (blog: BlogSchema) => {
   revalidatePath("/");
   redirect("/");
 };
+
+export const deleteBlog = async (id: string, activityId: string) => {
+  const user = await getSessionUser();
+
+  if (!user)
+    return {
+      message: "User not found, Login or SignUp to continue!",
+      reason: "User not found",
+      type: "error",
+    };
+
+  const { id: authorId } = user;
+
+  await prisma.blogPosts.delete({
+    where: {
+      id,
+    },
+  });
+
+  await prisma.user.update({
+    where: {
+      id: authorId,
+    },
+    data: {
+      totalPosts: {
+        decrement: 1,
+      },
+    },
+  });
+
+  await prisma.activity.delete({
+    where: {
+      id: activityId,
+    },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/dashboard/blogs");
+};
