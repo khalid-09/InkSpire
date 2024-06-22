@@ -32,3 +32,24 @@ export const signupSchema = z
   });
 
 export type SignupSchema = z.infer<typeof signupSchema>;
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z
+      .string({
+        required_error: "Current password is required",
+      })
+      .min(8, { message: "Password must be at least 8 characters" }),
+    newPassword: z
+      .string({ required_error: "New password is required" })
+      .min(8, { message: "Password must be at least 8 characters" }),
+    confirmPassword: z
+      .string({ required_error: "Confirm password is required" })
+      .min(8, { message: "Password must be at least 8 characters" }),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
+
+export type ChangePasswordSchema = z.infer<typeof changePasswordSchema>;

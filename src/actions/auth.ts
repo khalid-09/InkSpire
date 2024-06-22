@@ -2,11 +2,13 @@
 
 import { signIn } from "@/auth";
 import prisma from "@/db/db";
-import { getUserByEmail } from "@/lib/data/user";
-import { generateUsername } from "@/lib/utils";
+import { getUserByEmail, getUserById } from "@/lib/data/user";
+import { generateUsername, getSessionUser } from "@/lib/utils";
 import {
+  ChangePasswordSchema,
   LoginSchema,
   SignupSchema,
+  changePasswordSchema,
   loginSchema,
   signupSchema,
 } from "@/lib/validation/auth";
@@ -79,4 +81,46 @@ export const signupUser = async (values: SignupSchema) => {
   //TODO: Send email verification
 
   return { message: "User created!", type: "success" };
+};
+
+export const changePassword = async (data: ChangePasswordSchema) => {
+  const user = await getSessionUser();
+  if (!user) {
+    return { message: "You are not logged In!", type: "error" };
+  }
+
+  const { id } = user;
+
+  const validatedFields = changePasswordSchema.safeParse(data);
+  if (!validatedFields.success) {
+    return { message: "Invalid Fields!", type: "error" };
+  }
+
+  const { currentPassword, newPassword } = validatedFields.data;
+
+  const existingUser = await getUserById(id!);
+
+  if (!existingUser) return { message: "User not found!", type: "error" };
+
+  const passwordMatch = await bcrypt.compare(
+    currentPassword,
+    existingUser.password!,
+  );
+
+  if (!passwordMatch) {
+    return { message: "Current Password is Incorrect!", type: "error" };
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  await prisma.user.update({
+    where: {
+      id: id!,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+
+  return { message: "Password Changed!", type: "success" };
 };
