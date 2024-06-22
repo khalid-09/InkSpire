@@ -29,6 +29,9 @@ import {
   TwitterLogoIcon,
 } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { toast } from "sonner";
+import prisma from "@/db/db";
+import { updateImage } from "@/actions/user";
 
 type socialLinks = {
   socialLinks: SocialLinks[];
@@ -42,6 +45,7 @@ const maxBioLength = 200;
 
 const EditProfileForm = ({
   user: {
+    id,
     name,
     username,
     email,
@@ -82,13 +86,40 @@ const EditProfileForm = ({
         <H4>Edit Profile</H4>
         <div className="relative h-40 w-40 overflow-hidden rounded-full">
           <Image
-            src={img}
+            src={image!}
             alt={name || ""}
             className="absolute object-cover"
             fill
           />
         </div>
-        <Button className="w-full rounded-full">Upload</Button>
+        <UploadButton
+          endpoint="imageUploader"
+          onClientUploadComplete={(res) => {
+            setImg(res.at(0)?.url!);
+            toast.promise(updateImage(res.at(0)?.url!), {
+              loading: "Uploading Image...",
+              success: ({ type, message }) => {
+                if (type === "error") {
+                  return message;
+                }
+                return message;
+              },
+              error: (err) => {
+                if (err instanceof Error) {
+                  console.error(err.message);
+                  return "Something went wrong, try again later!";
+                } else {
+                  console.error("Unexpected error:", err);
+                  return "An unexpected error occurred!";
+                }
+              },
+            });
+          }}
+          onUploadError={(error: Error) => {
+            toast.error("Something went wrong, try again later!");
+            console.error(error.message);
+          }}
+        />
       </section>
       <section className="w-full space-y-8 ">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
