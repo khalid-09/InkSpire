@@ -10,7 +10,11 @@ interface CurrentPath {
   currentPath: "blogs" | "notifications" | "edit-profile" | "change-password";
 }
 
-const UserNavSideBar = () => {
+interface UserNavSideBarProps {
+  showChangePassword: boolean;
+}
+
+const UserNavSideBar = ({ showChangePassword }: UserNavSideBarProps) => {
   const pathname = usePathname();
   const currentPath = pathname.split("/").at(2) as CurrentPath["currentPath"];
 
@@ -61,16 +65,18 @@ const UserNavSideBar = () => {
             <User className="h-5 w-5" />
             <span>Edit Profile</span>
           </Link>
-          <Link
-            href="/settings/change-password"
-            className={cn(
-              "flex w-full items-center gap-3",
-              currentPath === "change-password" && activeStyles,
-            )}
-          >
-            <LockKeyhole className="h-5 w-5" />
-            <span>Change Password</span>
-          </Link>
+          {showChangePassword && (
+            <Link
+              href="/settings/change-password"
+              className={cn(
+                "flex w-full items-center gap-3",
+                currentPath === "change-password" && activeStyles,
+              )}
+            >
+              <LockKeyhole className="h-5 w-5" />
+              <span>Change Password</span>
+            </Link>
+          )}
         </div>
       </div>
     </aside>
