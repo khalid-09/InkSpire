@@ -12,6 +12,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Trash } from "lucide-react";
 import { useTransition } from "react";
 import { toast } from "sonner";
 
@@ -54,7 +55,9 @@ const DeleteBlog = ({ id, activityId, authorId }: DeleteBlogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Delete</Button>
+        <Button className="space-x-2" size="icon">
+          <Trash />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -64,7 +67,7 @@ const DeleteBlog = ({ id, activityId, authorId }: DeleteBlogProps) => {
             post.
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="flex flex-col gap-3">
+        <DialogFooter className="flex flex-col gap-2">
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>

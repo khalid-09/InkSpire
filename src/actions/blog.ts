@@ -13,13 +13,21 @@ export const saveDraft = async (
   image: string,
 ) => {
   const user = await getSessionUser();
+
+  if (!user)
+    return {
+      message: "User not found, Login or SignUp to continue!",
+      reason: "User not found",
+      type: "error",
+    };
+
   const slug = `${toSlug(title)}-${nanoid(10)}`;
   await prisma.blogPosts.create({
     data: {
       title,
       content: blocks,
       bannerImage: image,
-      authorId: user?.id,
+      authorId: user.id,
       slug,
       draft: true,
     },
@@ -28,6 +36,15 @@ export const saveDraft = async (
 };
 
 export const createBlog = async (blog: BlogSchema) => {
+  const user = await getSessionUser();
+
+  if (!user)
+    return {
+      message: "User not found, Login or SignUp to continue!",
+      reason: "User not found",
+      type: "error",
+    };
+
   const validatedFields = blogSchema.safeParse(blog);
 
   if (!validatedFields.success)
@@ -40,15 +57,6 @@ export const createBlog = async (blog: BlogSchema) => {
   const { tags, title, blocks, description, image } = validatedFields.data;
 
   const slug = `${toSlug(title)}-${nanoid(10)}`;
-
-  const user = await getSessionUser();
-
-  if (!user)
-    return {
-      message: "User not found, Login or SignUp to continue!",
-      reason: "User not found",
-      type: "error",
-    };
 
   const { id: authorId } = user;
 
@@ -76,11 +84,11 @@ export const createBlog = async (blog: BlogSchema) => {
     },
   });
 
-  const { id: blogId } = createdBlog;
+  const { id: blogPostId } = createdBlog;
 
   await prisma.activity.create({
     data: {
-      blogPostId: blogId,
+      blogPostId,
     },
   });
 
@@ -125,4 +133,42 @@ export const deleteBlog = async (
 
   revalidatePath("/");
   revalidatePath("/dashboard/blogs");
+};
+
+export const editBlog = async (slug: string, blog: BlogSchema) => {
+  const user = await getSessionUser();
+
+  if (!user)
+    return {
+      message: "User not found, Login or SignUp to continue!",
+      reason: "User not found",
+      type: "error",
+    };
+
+  const validatedFields = blogSchema.safeParse(blog);
+
+  if (!validatedFields.success)
+    return {
+      message: "Something went wrong, Try again later!",
+      reason: validatedFields.error.message,
+      type: "error",
+    };
+
+  const { tags, title, blocks, description, image } = validatedFields.data;
+
+  await prisma.blogPosts.update({
+    where: {
+      slug,
+    },
+    data: {
+      title,
+      description,
+      content: blocks,
+      bannerImage: image,
+      tags,
+    },
+  });
+
+  revalidatePath("/");
+  redirect("/");
 };

@@ -3,6 +3,9 @@ import { convertDate } from "@/lib/utils";
 import { Activity, BlogPosts } from "@prisma/client";
 import Image from "next/image";
 import DeleteBlog from "./delete-blog";
+import { Pencil } from "lucide-react";
+import { Pencil1Icon } from "@radix-ui/react-icons";
+import Link from "next/link";
 
 type activity = {
   activity: Activity[];
@@ -19,6 +22,7 @@ const PublishedBlogs = ({
     createdAt,
     id,
     authorId,
+    slug,
     activity: [{ id: activityId, totalComments, totalLikes, totalReads }],
   },
 }: PublishedBlogsProps) => {
@@ -39,8 +43,11 @@ const PublishedBlogs = ({
             <span>Published on {convertDate(createdAt)}</span>
           </div>
           <div className="flex gap-3">
-            <Button className="flex-grow-0" variant="outline">
-              Edit
+            <Button variant="outline" asChild>
+              <Link href={`/blog/edit/${slug}`} className="space-x-1">
+                <Pencil1Icon className="h-4 w-4" />
+                <span>Edit</span>
+              </Link>
             </Button>
             <DeleteBlog authorId={authorId!} id={id} activityId={activityId} />
           </div>

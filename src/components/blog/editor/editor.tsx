@@ -1,9 +1,9 @@
 "use client";
 
-import { useBlog } from "@/context/blog-context";
-import { uploadFiles } from "@/lib/uploadthing";
-import EditorJS from "@editorjs/editorjs";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useBlog } from "@/context/blog-context";
+import EditorJS from "@editorjs/editorjs";
+import { uploadFiles } from "@/lib/uploadthing";
 
 const uploadByUrl = (file: File) => {
   const link = new Promise((resolve, reject) => {
@@ -35,8 +35,6 @@ const NewEditor = ({ data, readOnly = false }: EditorProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const ref = useRef<EditorJS>();
   const { setBlog } = useBlog();
-
-  console.log(data);
 
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;

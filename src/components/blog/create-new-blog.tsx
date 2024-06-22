@@ -5,19 +5,25 @@ import { useState } from "react";
 import BlogEditor from "./editor/blog-editor";
 import AnimationWrapper from "../animation-wrapper";
 import PublishBlog from "./publish/publish-blog";
+import { BlogPosts } from "@prisma/client";
 
-const CreateNewBlog = () => {
+interface CreateNewBlogProps {
+  blog?: BlogPosts;
+  location: "edit" | "create";
+}
+
+const CreateNewBlog = ({ blog, location }: CreateNewBlogProps) => {
   const [type, setType] = useState<"editor" | "publish">("editor");
 
   return (
     <BlogContextProvider>
       {type === "editor" ? (
         <AnimationWrapper>
-          <BlogEditor setType={setType} />
+          <BlogEditor location={location} blog={blog} setType={setType} />
         </AnimationWrapper>
       ) : (
         <AnimationWrapper>
-          <PublishBlog setType={setType} />
+          <PublishBlog slug={blog?.slug} location={location} />
         </AnimationWrapper>
       )}
     </BlogContextProvider>

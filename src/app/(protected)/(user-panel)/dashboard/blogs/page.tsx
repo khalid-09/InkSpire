@@ -141,7 +141,6 @@ const DashboardBlogPage = async ({
           <TabsContent value="published" className="space-y-4  divide-y-2">
             {publishedBlogs.map((blog) => (
               <PublishedBlogs key={blog.id} blog={blog} />
-              // <DashboardBlogsSkeleton key={blog.id} />
             ))}
             {publishedBlogs.length === 0 && (
               <div>

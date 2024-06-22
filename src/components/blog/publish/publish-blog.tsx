@@ -1,18 +1,19 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useBlog } from "@/context/blog-context";
 import { BlogSchema } from "@/lib/validation/blog";
-import { createBlog } from "@/actions/blog";
+import { createBlog, editBlog } from "@/actions/blog";
 import Image from "next/image";
 
-import RichTextEditor from "../editor/rich-text-editor";
-import { H4, P } from "@/components/typography";
+import NewEditor from "../editor/editor";
+
+import { P } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Cross1Icon, CrossCircledIcon } from "@radix-ui/react-icons";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -24,12 +25,13 @@ import {
 } from "@/components/ui/card";
 
 interface PublishBlogProps {
-  setType: Dispatch<SetStateAction<"editor" | "publish">>;
+  slug?: string;
+  location: "edit" | "create";
 }
 
 const wordLimit = 200;
 
-const PublishBlog = ({ setType }: PublishBlogProps) => {
+const PublishBlog = ({ location, slug }: PublishBlogProps) => {
   const {
     blog,
     blog: { title, tags, image, blocks, description },
@@ -37,10 +39,6 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
   } = useBlog();
   const [newTag, setNewTag] = useState("");
   const [isPending, startTransition] = useTransition();
-
-  const handleClose = () => {
-    setType("editor");
-  };
 
   const handleAddTag = () => {
     if (newTag.trim() !== "") {
@@ -58,9 +56,29 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
 
   const handlePublish = (blog: BlogSchema) => {
     // TODO : VALIDATE ALL THE FIELDS
+    if (location === "create") {
+      startTransition(async () => {
+        try {
+          const response = await createBlog(blog);
+
+          if (response) {
+            toast.error(response.message);
+            console.error(response.reason);
+            return;
+          }
+
+          toast.success("Blog created Successfully!");
+        } catch (err) {
+          console.log(err);
+          if (err instanceof Error) toast.error(err.message);
+        }
+      });
+
+      return;
+    }
     startTransition(async () => {
       try {
-        const response = await createBlog(blog);
+        const response = await editBlog(slug!, blog);
 
         if (response) {
           toast.error(response.message);
@@ -68,7 +86,7 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
           return;
         }
 
-        toast.success("Blog created Successfully!");
+        toast.success("Blog updated Successfully!");
       } catch (err) {
         console.log(err);
         if (err instanceof Error) toast.error(err.message);
@@ -78,11 +96,7 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
 
   return (
     <>
-      <div className="mb-4 mt-10 flex w-full items-center justify-between">
-        <H4>Preview</H4>
-        <Cross1Icon className="h-6 w-6 cursor-pointer" onClick={handleClose} />
-      </div>
-      <div className="mb-4 flex flex-col gap-4 md:flex-row">
+      <div className="mb-0 flex flex-col gap-4 md:flex-row">
         <section className="flex w-full flex-1 flex-col space-y-4 md:w-3/5">
           <div className="relative h-96 overflow-hidden rounded-md">
             <Image
@@ -178,7 +192,13 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
                   {isPending && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
-                  {isPending ? "Publishing" : "Publish"}
+                  {isPending
+                    ? location === "create"
+                      ? "Publishing"
+                      : "Updating"
+                    : location === "create"
+                      ? "Publish"
+                      : "Update"}
                 </Button>
               </div>
             </CardContent>
@@ -186,7 +206,7 @@ const PublishBlog = ({ setType }: PublishBlogProps) => {
         </section>
       </div>
       <div className="mb-4 w-full">
-        <RichTextEditor editable={false} content={blocks} />
+        <NewEditor readOnly={true} data={blocks} />
       </div>
     </>
   );

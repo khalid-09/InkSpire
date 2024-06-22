@@ -17,7 +17,7 @@ const NewBlogPage = async () => {
 
   return (
     <>
-      <CreateNewBlog />
+      <CreateNewBlog location="create" />
     </>
   );
 };

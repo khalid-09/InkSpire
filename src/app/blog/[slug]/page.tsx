@@ -1,15 +1,15 @@
-import RichTextEditor from "@/components/blog/editor/rich-text-editor";
+import NewEditor from "@/components/blog/editor/editor";
 import BlogActivity from "@/components/blog/home/blog-activity";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
 import ReadBlog from "@/components/blog/home/read-blog";
-import { H1, H2, H3 } from "@/components/typography";
+import { H1, H2 } from "@/components/typography";
 import prisma from "@/db/db";
 import { getUserById } from "@/lib/data/user";
 import { convertDate, getSessionUser } from "@/lib/utils";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Suspense, cache } from "react";
 
 interface BlogPageProps {
@@ -141,12 +141,15 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
             <p>Published on {convertDate(createdAt)}</p>
           </div>
         </div>
-        <BlogActivity
-          disabled={disabled}
-          blogId={id}
-          blogActivity={blogActivity}
-        />
-        <RichTextEditor editable={false} content={content} />
+        <div>
+          {" "}
+          <BlogActivity
+            disabled={disabled}
+            blogId={id}
+            blogActivity={blogActivity}
+          />
+          <NewEditor readOnly={true} data={content} />
+        </div>
       </article>
       {similarBlogs.length > 0 && (
         <>

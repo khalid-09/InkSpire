@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Pencil1Icon } from "@radix-ui/react-icons";
+import { Trash } from "lucide-react";
 
 const DashboardBlogLoading = () => {
   return (
@@ -32,10 +34,13 @@ const DashboardBlogLoading = () => {
                       <Skeleton className="h-4 w-3/4" />
                     </div>
                     <div className="flex gap-3">
-                      <Button className="flex-grow-0" variant="outline">
-                        Edit
+                      <Button variant="outline" className="space-x-1">
+                        <Pencil1Icon className="h-4 w-4" />
+                        <span>Edit</span>
                       </Button>
-                      <Button variant="destructive">Delete</Button>
+                      <Button className="space-x-2" size="icon">
+                        <Trash />
+                      </Button>
                     </div>
                   </div>
                 </div>
