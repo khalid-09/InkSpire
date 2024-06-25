@@ -12,12 +12,12 @@ export const editProfileSchema = z.object({
     .max(200, { message: "Bio should be less than 200 characters long" })
     .optional(),
 
-  youtubeLink: z.string().url({ message: "Please enter a url" }).optional(),
-  instaLink: z.string().url({ message: "Please enter a url" }).optional(),
-  fbLink: z.string().url({ message: "Please enter a url" }).optional(),
-  githubLink: z.string().url({ message: "Please enter a url" }).optional(),
-  personalLink: z.string().url({ message: "Please enter a url" }).optional(),
-  twitterLink: z.string().url({ message: "Please enter a url" }).optional(),
+  youtubeLink: z.string().url().or(z.literal("")).optional(),
+  instaLink: z.string().url().or(z.literal("")).optional(),
+  fbLink: z.string().url().or(z.literal("")).optional(),
+  githubLink: z.string().url().or(z.literal("")).optional(),
+  personalLink: z.string().url().or(z.literal("")).optional(),
+  twitterLink: z.string().url().or(z.literal("")).optional(),
 });
 
 export type EditProfileSchema = z.infer<typeof editProfileSchema>;

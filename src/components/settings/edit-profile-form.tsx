@@ -1,16 +1,22 @@
 "use client";
 
-import { SocialLinks, User } from "@prisma/client";
-import { H4, P } from "@/components/typography";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { UploadButton } from "@/lib/uploadthing";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { updateImage } from "@/actions/user";
+import { useState } from "react";
+import { SocialLinks, User } from "@prisma/client";
 import {
   EditProfileSchema,
   editProfileSchema,
 } from "@/lib/validation/edit-profile";
-import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
+import { toast } from "sonner";
+
+import { UploadButton } from "@/lib/uploadthing";
+
+import { H4, P } from "@/components/typography";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -20,7 +26,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "../ui/textarea";
-import { useState } from "react";
 import { AtSign, Link, Mail, User as UserIcon } from "lucide-react";
 import { FaFacebook, FaYoutube } from "react-icons/fa6";
 import {
@@ -28,10 +33,6 @@ import {
   InstagramLogoIcon,
   TwitterLogoIcon,
 } from "@radix-ui/react-icons";
-import Image from "next/image";
-import { toast } from "sonner";
-import prisma from "@/db/db";
-import { updateImage } from "@/actions/user";
 
 type socialLinks = {
   socialLinks: SocialLinks[];
@@ -45,7 +46,6 @@ const maxBioLength = 200;
 
 const EditProfileForm = ({
   user: {
-    id,
     name,
     username,
     email,
@@ -57,19 +57,19 @@ const EditProfileForm = ({
   const [characterCount, setCharacterCount] = useState(
     bio?.length ?? "Bio".length,
   );
-  const [img, setImg] = useState(image || "");
+  const [img, setImg] = useState(image || "/blog-banner.png");
 
   const form = useForm<EditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
     defaultValues: {
-      username: username!,
-      bio: bio! || "Bio",
-      youtubeLink: youtube! || "http://",
-      githubLink: github! || "http://",
-      personalLink: website! || "http://",
-      instaLink: instagram! || "http://",
-      fbLink: facebook! || "http://",
-      twitterLink: twitter! || "http://",
+      username: username || "",
+      bio: bio || "",
+      youtubeLink: youtube || "",
+      githubLink: github || "",
+      personalLink: website || "",
+      instaLink: instagram || "",
+      fbLink: facebook || "",
+      twitterLink: twitter || "",
     },
   });
 
@@ -86,7 +86,7 @@ const EditProfileForm = ({
         <H4>Edit Profile</H4>
         <div className="relative h-40 w-40 overflow-hidden rounded-full">
           <Image
-            src={image!}
+            src={img!}
             alt={name || ""}
             className="absolute object-cover"
             fill
@@ -178,7 +178,6 @@ const EditProfileForm = ({
                         const count = e.target.value.length;
                         setCharacterCount(count);
                         field.onChange(e);
-                        console.log(e);
                       }}
                     />
                   </FormControl>
@@ -200,6 +199,7 @@ const EditProfileForm = ({
                       <FormControl>
                         <div className="relative flex items-center">
                           <Input
+                            placeholder="https://"
                             {...field}
                             className="w-full rounded-full bg-muted px-9 py-5 dark:bg-background"
                           />
@@ -218,6 +218,7 @@ const EditProfileForm = ({
                       <FormControl>
                         <div className="relative flex items-center">
                           <Input
+                            placeholder="https://"
                             {...field}
                             className="w-full rounded-full bg-muted px-9 py-5 dark:bg-background"
                           />
@@ -236,6 +237,7 @@ const EditProfileForm = ({
                       <FormControl>
                         <div className="relative flex items-center">
                           <Input
+                            placeholder="https://"
                             {...field}
                             className="w-full rounded-full bg-muted px-9 py-5 dark:bg-background"
                           />
@@ -254,6 +256,7 @@ const EditProfileForm = ({
                       <FormControl>
                         <div className="relative flex items-center">
                           <Input
+                            placeholder="https://"
                             {...field}
                             className="w-full rounded-full bg-muted px-9 py-5 dark:bg-background"
                           />
@@ -272,6 +275,7 @@ const EditProfileForm = ({
                       <FormControl>
                         <div className="relative flex items-center">
                           <Input
+                            placeholder="https://"
                             {...field}
                             className="w-full rounded-full bg-muted px-9 py-5 dark:bg-background"
                           />
@@ -290,6 +294,7 @@ const EditProfileForm = ({
                       <FormControl>
                         <div className="relative flex items-center">
                           <Input
+                            placeholder="https://"
                             {...field}
                             className="w-full rounded-full bg-muted px-9 py-5 dark:bg-background"
                           />
