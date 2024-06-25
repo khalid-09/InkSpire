@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateImage } from "@/actions/user";
-import { useState } from "react";
+import { editProfile, updateImage } from "@/actions/user";
+import { useState, useTransition } from "react";
 import { SocialLinks, User } from "@prisma/client";
 import {
   EditProfileSchema,
@@ -26,7 +26,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Textarea } from "../ui/textarea";
-import { AtSign, Link, Mail, User as UserIcon } from "lucide-react";
+import { AtSign, Link, Loader2, Mail, User as UserIcon } from "lucide-react";
 import { FaFacebook, FaYoutube } from "react-icons/fa6";
 import {
   GitHubLogoIcon,
@@ -58,6 +58,7 @@ const EditProfileForm = ({
     bio?.length ?? "Bio".length,
   );
   const [img, setImg] = useState(image || "/blog-banner.png");
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<EditProfileSchema>({
     resolver: zodResolver(editProfileSchema),
@@ -76,8 +77,32 @@ const EditProfileForm = ({
   const { handleSubmit, reset, control } = form;
 
   const onSubmit = (data: EditProfileSchema) => {
-    console.log(data);
-    reset();
+    startTransition(async () => {
+      const { type, message, updatedUser } = await editProfile(data);
+      if (type === "error") {
+        toast.error(message);
+        return;
+      }
+      toast.success(message);
+      if (!updatedUser) return;
+      const {
+        username,
+        bio,
+        socialLinks: [
+          { website, youtube, github, twitter, instagram, facebook },
+        ],
+      } = updatedUser;
+      reset({
+        username: username!,
+        bio: bio!,
+        youtubeLink: youtube!,
+        fbLink: facebook!,
+        githubLink: github!,
+        personalLink: website!,
+        twitterLink: twitter!,
+        instaLink: instagram!,
+      });
+    });
   };
 
   return (
@@ -308,7 +333,10 @@ const EditProfileForm = ({
               </div>
             </div>
             <div className="flex justify-end">
-              <Button type="submit">Update</Button>
+              <Button type="submit">
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isPending ? "Updating" : " Update"}
+              </Button>
             </div>
           </form>
         </Form>
