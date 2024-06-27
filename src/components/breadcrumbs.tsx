@@ -9,49 +9,95 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu";
+
 import Link from "next/link";
+import { Button } from "./ui/button";
 
-const Breadcrumbs = () => {
+interface BreadcrumbsProps {
+  showChangePassword: boolean;
+}
+
+const Breadcrumbs = ({ showChangePassword }: BreadcrumbsProps) => {
   const pathname = usePathname();
-  const categoryPathname = pathname.split("/").at(1);
-
-  let category = {
-    categoryLink: "",
-    categoryName: "",
-  };
-
-  if (categoryPathname === "react") {
-    category.categoryLink = "/category/react";
-    category.categoryName = "React";
-  } else if (categoryPathname === "css") {
-    category.categoryLink = "/category/css";
-    category.categoryName = "CSS";
-  } else if (categoryPathname === "animations") {
-    category.categoryLink = "/category/animations";
-    category.categoryName = "Animations";
-  } else {
-    category.categoryLink = "/category/performance";
-    category.categoryName = "Performance";
-  }
+  const userNavPathname = pathname.split("/").at(1);
+  const userNavSubPathname = pathname.split("/").at(2);
+  console.log(userNavPathname);
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className="mt-7 block md:hidden">
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink className="text-lg" asChild>
+          <BreadcrumbLink asChild>
             <Link href="/">Home</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink className="text-lg" asChild>
-            <Link href={category.categoryLink}>Blog</Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
+        <NavigationMenu>
+          <NavigationMenuList>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>
+                {userNavPathname?.charAt(0).toUpperCase()! +
+                  userNavPathname?.slice(1)}
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <Button asChild variant="outline">
+                  <Link
+                    href={
+                      userNavPathname === "dashboard"
+                        ? "/settings/edit-profile"
+                        : "/dashboard/blogs"
+                    }
+                  >
+                    {userNavPathname === "dashboard" ? "Settings" : "Dashboard"}
+                  </Link>
+                </Button>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage className="text-lg">
-            {category.categoryName}
+          <BreadcrumbPage>
+            {showChangePassword && userNavPathname === "settings" ? (
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger>
+                      {userNavSubPathname?.charAt(0).toUpperCase()! +
+                        userNavSubPathname?.slice(1)}
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <Button asChild variant="outline">
+                        <Link
+                          href={
+                            userNavSubPathname === "edit-profile"
+                              ? "/settings/change-password"
+                              : "/dashboard/edit-profile"
+                          }
+                        >
+                          {userNavSubPathname === "edit-profile"
+                            ? "Change Password"
+                            : "Edit Profile"}
+                        </Link>
+                      </Button>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+            ) : (
+              userNavSubPathname?.charAt(0).toUpperCase()! +
+              userNavSubPathname?.slice(1)
+            )}
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>

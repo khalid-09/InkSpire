@@ -140,7 +140,7 @@ const UserProfile = async ({
             </PaginateButton>
           )}
         </TabsContent>
-        <TabsContent value="about">
+        <TabsContent value="about" className="space-y-3">
           <P className="">{bio || "Nothing to read here."}</P>
           <SocialIcons socialLinks={socialLinks} />
           <P className="text-muted-foreground ">
@@ -171,7 +171,10 @@ const UserProfile = async ({
           </div>
         )}
         <P className="hidden md:block">{bio || "Nothing to read here."}</P>
-        <SocialIcons socialLinks={socialLinks} />
+        <div className="hidden md:block">
+          {" "}
+          <SocialIcons socialLinks={socialLinks} />
+        </div>
         <P className="hidden text-muted-foreground md:block [&:not(:first-child)]:mt-0">
           Joined on {convertDate(createdAt, "dd MMMM yyyy")}
         </P>

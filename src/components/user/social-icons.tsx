@@ -4,6 +4,7 @@ import {
   InstagramLogoIcon,
   TwitterLogoIcon,
 } from "@radix-ui/react-icons";
+import { Link as LinkIcon } from "lucide-react";
 import { SocialLinks } from "@prisma/client";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -13,7 +14,7 @@ interface SocialIconsProps {
 }
 
 const SocialIcons = ({
-  socialLinks: [{ youtube, twitter, instagram, facebook, github }],
+  socialLinks: [{ youtube, twitter, instagram, facebook, github, website }],
 }: SocialIconsProps) => {
   return (
     <div className="flex items-center gap-3 text-muted-foreground">
@@ -31,6 +32,9 @@ const SocialIcons = ({
       </Link>
       <Link href={github!} className={cn("", !github && "hidden")}>
         <GitHubLogoIcon className="h-6 w-6" />
+      </Link>
+      <Link href={website!} className={cn("", !website && "hidden")}>
+        <LinkIcon className="h-6 w-6" />
       </Link>
     </div>
   );

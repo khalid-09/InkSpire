@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getSessionUser } from "@/lib/utils";
 import UserNavSideBar from "@/components/user-panel/usernav-sidebar";
 import prisma from "@/db/db";
+import Breadcrumbs from "@/components/breadcrumbs";
 
 const UserPanelLayout = async ({
   children,
@@ -21,6 +22,7 @@ const UserPanelLayout = async ({
 
   return (
     <section className="flex min-h-dvh flex-col md:flex-row">
+      <Breadcrumbs showChangePassword={showChangePassword} />
       <UserNavSideBar showChangePassword={showChangePassword} />
       <div className="mt-10 w-full md:w-[80%]">{children}</div>
     </section>
