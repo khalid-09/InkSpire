@@ -1,25 +1,22 @@
 "use client";
 
+import { useEffect, useOptimistic, useState } from "react";
+import { addLikes, checkIfUserLiked, removeLike } from "@/actions/activity";
+import { toast } from "sonner";
+
+import BlogComments from "./blog-comments";
+
 import { Button } from "@/components/ui/button";
 import { TwitterLogoIcon } from "@radix-ui/react-icons";
-import { useEffect, useOptimistic, useState } from "react";
 import { GoHeart, GoHeartFill } from "react-icons/go";
-import { toast } from "sonner";
-import BlogComments from "./blog-comments";
-import { Activity } from "@prisma/client";
-import { addLikes, checkIfUserLiked, removeLike } from "@/actions/activity";
 
 interface BlogActivityProps {
   blogId: string;
-  blogActivity: Activity;
+  totalLikes: number;
   disabled: boolean;
 }
 
-const BlogActivity = ({
-  disabled,
-  blogId,
-  blogActivity: { totalLikes },
-}: BlogActivityProps) => {
+const BlogActivity = ({ disabled, blogId, totalLikes }: BlogActivityProps) => {
   const [hasLiked, setHasLiked] = useState(false);
   const [optimisticLikes, setOptimisticLikes] = useOptimistic(totalLikes);
 
@@ -33,7 +30,7 @@ const BlogActivity = ({
   }, [blogId]);
 
   const handleLikes = async () => {
-    if (disabled) return toast.info("You need to login to like a blog post");
+    if (disabled) return toast.info("Login to like this post.");
 
     if (hasLiked) {
       setOptimisticLikes((prevLikes) => prevLikes - 1);
@@ -43,22 +40,25 @@ const BlogActivity = ({
       try {
         await removeLike(blogId);
       } catch (error) {
+        console.log(error);
         setOptimisticLikes((prevLikes) => prevLikes + 1);
         setHasLiked(true);
         toast.error("Error removing like.");
       }
-    } else {
-      setOptimisticLikes((prevLikes) => prevLikes + 1);
-      setHasLiked(true);
-      toast.success("Added to favorites 💖");
+      return;
+    }
 
-      try {
-        await addLikes(blogId);
-      } catch (error) {
-        setOptimisticLikes((prevLikes) => prevLikes - 1);
-        setHasLiked(false);
-        toast.error("Error adding like.");
-      }
+    setOptimisticLikes((prevLikes) => prevLikes + 1);
+    setHasLiked(true);
+    toast.success("Added to favorites 💖");
+
+    try {
+      await addLikes(blogId);
+    } catch (error) {
+      console.log(error);
+      setOptimisticLikes((prevLikes) => prevLikes - 1);
+      setHasLiked(false);
+      toast.error("Error adding like.");
     }
   };
 
@@ -66,12 +66,7 @@ const BlogActivity = ({
     <div className="flex w-full items-center justify-between">
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2">
-          <Button
-            // disabled={disabled}
-            onClick={handleLikes}
-            variant="secondary"
-            size="icon"
-          >
+          <Button onClick={handleLikes} variant="secondary" size="icon">
             {hasLiked ? (
               <GoHeartFill className="h-5 w-5 text-primary" />
             ) : (

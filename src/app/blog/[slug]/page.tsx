@@ -34,7 +34,13 @@ export const generateStaticParams = async () => {
 };
 
 const getBlog = cache(async (slug: string) => {
-  const blog = await prisma.blogPosts.findUnique({ where: { slug } });
+  const blog = await prisma.blogPosts.findUnique({
+    where: { slug },
+    include: {
+      activity: true,
+      author: { select: { image: true, username: true, name: true } },
+    },
+  });
   if (!blog) notFound();
   return blog;
 });
@@ -51,16 +57,24 @@ export const generateMetadata = async ({
 
 const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
   const blog = await getBlog(slug);
-  const { authorId, title, bannerImage, content, createdAt, id, tags } = blog;
 
-  const userPromise = getUserById(authorId!);
+  const {
+    authorId,
+    title,
+    bannerImage,
+    content,
+    createdAt,
+    id,
+    tags,
+    activity: [{ totalLikes }],
+    author,
+  } = blog;
+
+  if (!author) notFound();
+
+  const { image, username, name } = author;
+
   const sessionUserPromise = getSessionUser();
-
-  const blogActivityPromise = prisma.activity.findUnique({
-    where: {
-      blogPostId: id,
-    },
-  });
 
   const similarBlogsPromise = prisma.blogPosts.findMany({
     where: {
@@ -96,16 +110,13 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
     },
   });
 
-  const [user, sessionUser, blogActivity, similarBlogs] = await Promise.all([
-    userPromise,
+  const [sessionUser, similarBlogs] = await Promise.all([
     sessionUserPromise,
-    blogActivityPromise,
     similarBlogsPromise,
     increaseReads,
     increaseUserReads,
   ]);
 
-  if (!blogActivity) notFound();
   const disabled = sessionUser ? false : true;
 
   return (
@@ -124,16 +135,16 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
           <div className="mb-2 flex w-full items-center gap-5 md:gap-7">
             <div className="relative h-12 w-12 overflow-hidden rounded-full">
               <Image
-                src={user?.image! || "/vercel.svg"}
+                src={image! || "/vercel.svg"}
                 fill
-                alt={user?.name!}
+                alt={name!}
                 className="absolute object-cover"
               />
             </div>
             <div>
-              <p className="font-medium">{user?.name}</p>
+              <p className="font-medium">{name}</p>
               <p className="text-sm text-muted-foreground underline transition dark:hover:text-primary-foreground">
-                <Link href={`/user/${user?.username}`}>@{user?.username}</Link>
+                <Link href={`/user/${username}`}>@{username}</Link>
               </p>
             </div>
           </div>
@@ -142,11 +153,10 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
           </div>
         </div>
         <div>
-          {" "}
           <BlogActivity
             disabled={disabled}
             blogId={id}
-            blogActivity={blogActivity}
+            totalLikes={totalLikes}
           />
           <NewEditor readOnly={true} data={content} />
         </div>
