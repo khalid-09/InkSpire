@@ -1,16 +1,19 @@
+import { Suspense, cache } from "react";
+import prisma from "@/db/db";
+
+import { convertDate, getSessionUser } from "@/lib/utils";
+
+import Link from "next/link";
+import Image from "next/image";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import NewEditor from "@/components/blog/editor/editor";
+
 import BlogActivity from "@/components/blog/home/blog-activity";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
 import ReadBlog from "@/components/blog/home/read-blog";
 import { H1, H2 } from "@/components/typography";
-import prisma from "@/db/db";
-import { getUserById } from "@/lib/data/user";
-import { convertDate, getSessionUser } from "@/lib/utils";
-import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
-import { Suspense, cache } from "react";
+import BlogComments from "@/components/blog/home/blog-comments";
 
 interface BlogPageProps {
   params: {
@@ -38,7 +41,16 @@ const getBlog = cache(async (slug: string) => {
     where: { slug },
     include: {
       activity: true,
-      author: { select: { image: true, username: true, name: true } },
+      comments: {
+        include: {
+          user: {
+            select: { image: true, username: true, name: true },
+          },
+        },
+      },
+      author: {
+        select: { image: true, username: true, name: true },
+      },
     },
   });
   if (!blog) notFound();
@@ -67,6 +79,7 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
     id,
     tags,
     activity: [{ totalLikes }],
+    comments,
     author,
   } = blog;
 
@@ -155,9 +168,12 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
         <div>
           <BlogActivity
             disabled={disabled}
-            blogId={id}
+            blog={blog}
             totalLikes={totalLikes}
-          />
+            comments={comments.length}
+          >
+            <BlogComments title={title} blogId={id} comments={comments} />
+          </BlogActivity>
           <NewEditor readOnly={true} data={content} />
         </div>
       </article>

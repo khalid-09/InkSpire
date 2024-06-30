@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useOptimistic, useState } from "react";
-import { addLikes, checkIfUserLiked, removeLike } from "@/actions/activity";
+import { addLikes, checkIfUserLiked, removeLike } from "@/actions/likes";
 import { toast } from "sonner";
 
 import BlogComments from "./blog-comments";
@@ -9,14 +9,23 @@ import BlogComments from "./blog-comments";
 import { Button } from "@/components/ui/button";
 import { TwitterLogoIcon } from "@radix-ui/react-icons";
 import { GoHeart, GoHeartFill } from "react-icons/go";
+import { BlogPosts, Comments } from "@prisma/client";
 
 interface BlogActivityProps {
-  blogId: string;
+  children: React.ReactNode;
+  blog: BlogPosts;
   totalLikes: number;
   disabled: boolean;
+  comments: number;
 }
 
-const BlogActivity = ({ disabled, blogId, totalLikes }: BlogActivityProps) => {
+const BlogActivity = ({
+  children,
+  disabled,
+  totalLikes,
+  blog: { id: blogId },
+  comments,
+}: BlogActivityProps) => {
   const [hasLiked, setHasLiked] = useState(false);
   const [optimisticLikes, setOptimisticLikes] = useOptimistic(totalLikes);
 
@@ -75,7 +84,8 @@ const BlogActivity = ({ disabled, blogId, totalLikes }: BlogActivityProps) => {
           </Button>
           <p className="text-xl tabular-nums">{optimisticLikes}</p>
         </div>
-        <BlogComments />
+        {children}
+        <p text-xl>{comments}</p>
       </div>
       <div>
         <Button variant="secondary" size="icon">

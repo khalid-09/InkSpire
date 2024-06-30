@@ -130,11 +130,6 @@ const HomePage = async ({
                     No Blogs Found ;)
                     <br /> Start writing some 🙂
                   </H1>
-                  {/* {page ? (
-                    <P className="text-lg font-medium italic">
-                      or make sure you are on the right page 🤔
-                    </P>
-                  ) : null} */}
                 </div>
               )}
               {blogs.length > 0 && (
