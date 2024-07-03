@@ -25,7 +25,18 @@ export const addComment = async (blogId: string, data: CommentSchema) => {
       content: comment,
       parentId: null,
     },
-  });
+  }); // Add a parent comment
+
+  await prisma.activity.update({
+    where: {
+      blogPostId: blogId,
+    },
+    data: {
+      totalComments: {
+        increment: 1,
+      },
+    },
+  }); // Increment the totalComments count
 
   revalidatePath("/blog/[slug]", "page");
 
@@ -52,6 +63,23 @@ const deleteCommentsRecursive = async (id: string) => {
 
 export const deleteComment = async (formData: FormData) => {
   const commentId = formData.get("commentId") as string;
+
+  const comment = await prisma.comments.findUnique({
+    where: { id: commentId },
+  });
+
+  if (comment?.parentId === null) {
+    await prisma.activity.update({
+      where: {
+        blogPostId: comment.blogPostId,
+      },
+      data: {
+        totalComments: {
+          decrement: 1,
+        },
+      },
+    });
+  } // If it's a parent comment, decrement the totalComments count
 
   await deleteCommentsRecursive(commentId);
 
@@ -82,7 +110,7 @@ export const addReply = async (
       blogPostId,
       parentId: commentId,
     },
-  });
+  }); // Add a reply for a parent comment
 
   revalidatePath("/blog/[slug]", "page");
 

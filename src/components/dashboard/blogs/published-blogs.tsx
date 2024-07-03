@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { convertDate } from "@/lib/utils";
-import { Activity, BlogPosts } from "@prisma/client";
+import { Activity, BlogPosts, Comments } from "@prisma/client";
 import Image from "next/image";
 import DeleteBlog from "./delete-blog";
 import { Pencil } from "lucide-react";
@@ -11,8 +11,12 @@ type activity = {
   activity: Activity[];
 };
 
+type comments = {
+  comments: Comments[];
+};
+
 interface PublishedBlogsProps {
-  blog: BlogPosts & activity;
+  blog: BlogPosts & activity & comments;
 }
 
 const PublishedBlogs = ({
@@ -24,6 +28,7 @@ const PublishedBlogs = ({
     authorId,
     slug,
     activity: [{ id: activityId, totalComments, totalLikes, totalReads }],
+    comments,
   },
 }: PublishedBlogsProps) => {
   return (

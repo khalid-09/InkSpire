@@ -19,7 +19,6 @@ import { MessageCircleMore } from "lucide-react";
 
 interface BlogCommentsProps {
   title: string;
-  comments: Comments[];
   blogId: string;
 }
 
@@ -56,8 +55,10 @@ const BlogComments = async ({ title, blogId }: BlogCommentsProps) => {
     <>
       <div className="w-full">
         <Sheet>
-          <SheetTrigger>
-            <Trigger />
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon">
+              <MessageCircleMore className="h-5 w-5" />
+            </Button>
           </SheetTrigger>
           <SheetContent className="w-full">
             <SheetHeader className="mb-4">
@@ -81,11 +82,3 @@ const BlogComments = async ({ title, blogId }: BlogCommentsProps) => {
 };
 
 export default BlogComments;
-
-const Trigger = () => {
-  return (
-    <Button variant="outline" size="icon">
-      <MessageCircleMore className="h-5 w-5" />
-    </Button>
-  );
-};

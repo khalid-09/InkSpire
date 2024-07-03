@@ -40,13 +40,8 @@ const getBlog = cache(async (slug: string) => {
   const blog = await prisma.blogPosts.findUnique({
     where: { slug },
     include: {
-      activity: true,
-      comments: {
-        include: {
-          user: {
-            select: { image: true, username: true, name: true },
-          },
-        },
+      activity: {
+        select: { totalComments: true, totalLikes: true },
       },
       author: {
         select: { image: true, username: true, name: true },
@@ -78,8 +73,7 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
     createdAt,
     id,
     tags,
-    activity: [{ totalLikes }],
-    comments,
+    activity: [{ totalLikes, totalComments }],
     author,
   } = blog;
 
@@ -170,9 +164,9 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
             disabled={disabled}
             blog={blog}
             totalLikes={totalLikes}
-            comments={comments.length}
+            comments={totalComments}
           >
-            <BlogComments title={title} blogId={id} comments={comments} />
+            <BlogComments title={title} blogId={id} />
           </BlogActivity>
           <NewEditor readOnly={true} data={content} />
         </div>
