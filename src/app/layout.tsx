@@ -38,7 +38,7 @@ export default function RootLayout({
           <HeaderNav />
           <main className="mx-auto max-w-6xl px-4">{children}</main>
         </ThemeProvider>
-        <Toaster position="top-left" />
+        <Toaster position="bottom-center" />
       </body>
     </html>
   );

@@ -1,13 +1,10 @@
-import { Button } from "@/components/ui/button";
+import prisma from "@/db/db";
+import { Comments } from "@prisma/client";
+import { getSessionUser } from "@/lib/utils";
 
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import Comment from "./comment/comment";
+import CommentForm from "./comment/comment-form";
+
 import {
   Sheet,
   SheetContent,
@@ -16,12 +13,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { MessageCircleMore, MessageSquareMore, TrashIcon } from "lucide-react";
-import CommentForm from "./comment/comment-form";
-import { Comments } from "@prisma/client";
-import prisma from "@/db/db";
-import Comment from "./comment/comment";
 import { P } from "@/components/typography";
+import { Button } from "@/components/ui/button";
+import { MessageCircleMore } from "lucide-react";
 
 interface BlogCommentsProps {
   title: string;
@@ -30,9 +24,12 @@ interface BlogCommentsProps {
 }
 
 const BlogComments = async ({ title, blogId }: BlogCommentsProps) => {
+  const sessionUser = await getSessionUser();
+
   const comments = await prisma.comments.findMany({
     where: {
       blogPostId: blogId,
+      parentId: null,
     },
     include: {
       user: {
@@ -41,10 +38,17 @@ const BlogComments = async ({ title, blogId }: BlogCommentsProps) => {
           image: true,
         },
       },
-      replies: true,
+      replies: {
+        include: {
+          user: { select: { username: true, image: true } },
+          replies: {
+            include: { user: { select: { username: true, image: true } } },
+          },
+        },
+      },
     },
     orderBy: {
-      id: "desc",
+      createdAt: "desc",
     },
   });
 
@@ -62,30 +66,16 @@ const BlogComments = async ({ title, blogId }: BlogCommentsProps) => {
             </SheetHeader>
             <CommentForm blogId={blogId} />
             {comments.map((comment) => (
-              <Comment key={comment.id} comment={comment} />
+              <Comment
+                key={comment.id}
+                sessionUser={sessionUser}
+                comment={comment}
+              />
             ))}
             {comments.length === 0 && <P>No comments 👻.</P>}
           </SheetContent>
         </Sheet>
       </div>
-      {/* <div className="block md:hidden">
-        <Drawer>
-          <DrawerTrigger>
-            <Trigger />
-          </DrawerTrigger>
-          <DrawerContent className="px-3">
-            <DrawerHeader>
-              <DrawerTitle>Comments</DrawerTitle>
-              <DrawerDescription>{title}</DrawerDescription>
-            </DrawerHeader>
-            <CommentForm blogId={blogId} />
-            {comments.map((comment) => (
-              <Comment key={comment.id} comment={comment} />
-            ))}
-            {comments.length === 0 && <P>No comments 👻.</P>}
-          </DrawerContent>
-        </Drawer>
-      </div> */}
     </>
   );
 };

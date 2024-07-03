@@ -9,7 +9,7 @@ import BlogComments from "./blog-comments";
 import { Button } from "@/components/ui/button";
 import { TwitterLogoIcon } from "@radix-ui/react-icons";
 import { GoHeart, GoHeartFill } from "react-icons/go";
-import { BlogPosts, Comments } from "@prisma/client";
+import { BlogPosts } from "@prisma/client";
 
 interface BlogActivityProps {
   children: React.ReactNode;
@@ -85,7 +85,7 @@ const BlogActivity = ({
           <p className="text-xl tabular-nums">{optimisticLikes}</p>
         </div>
         {children}
-        <p text-xl>{comments}</p>
+        <p className="text-xl tabular-nums">{comments}</p>
       </div>
       <div>
         <Button variant="secondary" size="icon">

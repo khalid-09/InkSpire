@@ -1,64 +1,60 @@
 "use client";
 
-import { deleteComment } from "@/actions/comments";
-import { Comments } from "@prisma/client";
-import { convertDate } from "@/lib/utils";
-
+import { MessageSquareMore } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
 import DeleteCommentButton from "./delete-comment-btn";
-
-import { Button } from "@/components/ui/button";
-import { MessageSquareMore } from "lucide-react";
-import { useState } from "react";
 import CommentForm from "./comment-form";
+import { useState } from "react";
+import { convertDate } from "@/lib/utils";
+import { Comments } from "@prisma/client";
+import { Button } from "@/components/ui/button";
 import { User } from "next-auth";
+import { deleteComment } from "@/actions/comments";
 
-interface CommentUser {
-  user: {
-    image: string | null;
-    username: string | null;
-  };
-}
-
-interface Replies {
-  replies: (Comments & CommentUser)[];
-}
-
-interface CommentProps {
-  comment: Comments & Partial<Replies> & CommentUser;
+interface SingleCommentProps {
+  id: string;
+  userId: string;
+  image: string | null;
+  username: string | null;
+  createdAt: Date;
+  content: string;
+  replies?: Comments[];
   sessionUser: User | undefined;
+  blogPostId: string;
 }
 
-const Comment = ({ comment, sessionUser }: CommentProps) => {
+const SingleComment = ({
+  id,
+  userId,
+  image,
+  username,
+  content,
+  createdAt,
+  replies,
+  blogPostId,
+  sessionUser,
+}: SingleCommentProps) => {
   const [showReplyForm, setShowReplyForm] = useState(false);
-  const [showReplies, setShowReplies] = useState(false);
 
   const handleReply = () => setShowReplyForm((prev) => !prev);
 
-  const handleShowReply = () => {
-    setShowReplies((prev) => !prev);
-  };
-
-  const { user, createdAt, content, userId, id, blogPostId, replies } = comment;
-
   return (
-    <div className="mt-4 space-y-2">
+    <>
       <div className="flex items-center gap-3">
         <div className="relative h-10 w-10 overflow-hidden rounded-full">
           <Image
-            src={user?.image! || "/vercel.svg"}
+            src={image! || "sdfija"}
             alt="hdfa"
             fill
             className="absolute object-cover"
           />
         </div>
         <Link
-          href={`/user/${user?.username}`}
+          href={`/user/${username}`}
           className="text-sm text-muted-foreground underline"
         >
-          @{user?.username}
+          @{username}
         </Link>
         <span>{convertDate(createdAt)}</span>
       </div>
@@ -67,12 +63,9 @@ const Comment = ({ comment, sessionUser }: CommentProps) => {
       </div>
       <div className="flex flex-wrap items-center justify-between">
         <div className="flex items-center gap-1">
-          <div
-            onClick={handleShowReply}
-            className="flex cursor-pointer items-center gap-1 text-sm text-muted-foreground"
-          >
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <MessageSquareMore />
-            {!showReplies ? `${replies?.length} Reply` : "Hide"}
+            {replies?.length || 0} Reply
           </div>
           <Button variant="link" onClick={handleReply}>
             {showReplyForm ? "Close" : "Reply"}
@@ -93,15 +86,8 @@ const Comment = ({ comment, sessionUser }: CommentProps) => {
           blogId={blogPostId}
         />
       )}
-      {replies &&
-        showReplies &&
-        replies.map((reply) => (
-          <div key={reply.id} className="mt-2 space-y-2 pl-6">
-            <Comment comment={reply} sessionUser={sessionUser} key={reply.id} />
-          </div>
-        ))}
-    </div>
+    </>
   );
 };
 
-export default Comment;
+export default SingleComment;

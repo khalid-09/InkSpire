@@ -8,7 +8,7 @@ const DeleteCommentButton = () => {
   const { pending } = useFormStatus();
 
   return (
-    <Button disabled={pending} type="submit" variant="outline" size="icon">
+    <Button disabled={pending} type="submit" size="icon">
       {pending && <Loader2 className="animate-spin" size={16} />}
       {!pending && <TrashIcon className="h-5 w-5" />}
     </Button>

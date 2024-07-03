@@ -36,6 +36,7 @@ const UserDropdown = async () => {
             height={50}
             width={50}
             alt={author.name!}
+            className="rounded-full object-cover"
           />
         </Avatar>
       </DropdownMenuTrigger>
