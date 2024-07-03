@@ -8,7 +8,7 @@ import Image from "next/image";
 
 import NewEditor from "../editor/editor";
 
-import { P } from "@/components/typography";
+import { H2, P } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,6 +56,7 @@ const PublishBlog = ({ location, slug }: PublishBlogProps) => {
 
   const handlePublish = (blog: BlogSchema) => {
     // TODO : VALIDATE ALL THE FIELDS
+
     if (location === "create") {
       startTransition(async () => {
         try {
@@ -95,8 +96,9 @@ const PublishBlog = ({ location, slug }: PublishBlogProps) => {
   };
 
   return (
-    <>
-      <div className="mb-0 flex flex-col gap-4 md:flex-row">
+    <div className="mt-4">
+      <H2>Preview</H2>
+      <div className="mb-0 flex flex-col-reverse gap-4 md:flex-row">
         <section className="flex w-full flex-1 flex-col space-y-4 md:w-3/5">
           <div className="relative h-96 overflow-hidden rounded-md">
             <Image
@@ -208,7 +210,7 @@ const PublishBlog = ({ location, slug }: PublishBlogProps) => {
       <div className="mb-4 w-full">
         <NewEditor readOnly={true} data={blocks} />
       </div>
-    </>
+    </div>
   );
 };
 

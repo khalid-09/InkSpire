@@ -32,8 +32,9 @@ div.bn-block {
   width: 100%;
 }
 
-#editor {
-  min-height: 200px;
+#editorjs {
+  min-height: 18rem;
+  font-family: "Montserrat", sans-serif;
 }
 
 .ce-block__content,
@@ -185,10 +186,6 @@ h4.ce-header {
   border-color: var(--border);
   color: white;
 }
-
-/* .dark .ce-block--selected .ce-block__content {
-  background-color: var(--muted-foreground);
-} */
 
 .ce-toolbar__plus {
   background-color: var(--background);

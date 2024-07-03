@@ -38,6 +38,14 @@ const BlogEditor = ({ setType, blog: blogPost, location }: BlogEditorProps) => {
   const handleDraft = () => {
     if (!blog.title) return toast.error("Please add a title to save the draft");
 
+    if (typeof blog.title !== "string")
+      return toast.error("Please add a valid title to save the draft");
+
+    if (blog.blocks) {
+      if (typeof blog.blocks !== "string")
+        return toast.error("Please add a valid content to save the draft");
+    }
+
     startTransition(async () => {
       try {
         const response = await saveDraft(blog.title, blog.blocks, blog.image);
@@ -67,7 +75,7 @@ const BlogEditor = ({ setType, blog: blogPost, location }: BlogEditorProps) => {
   };
 
   return (
-    <section className="my-10  flex w-full flex-col space-y-3">
+    <section className="mb-10  flex w-full flex-col space-y-3">
       <BannerImage />
       <BlogTitle />
       <NewEditor data={blogPost ? blogPost.content : undefined} />
