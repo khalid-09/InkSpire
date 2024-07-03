@@ -1,8 +1,10 @@
 import prisma from "@/db/db";
 import { getSessionUser } from "@/lib/utils";
+import { loadMoreComments } from "@/actions/tag";
 
 import Comment from "./comment/comment";
 import CommentForm from "./comment/comment-form";
+import PaginateButton from "@/components/dashboard/blogs/paginate-btn";
 
 import {
   Sheet,
@@ -15,8 +17,6 @@ import {
 import { P } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { MessageCircleMore } from "lucide-react";
-import PaginateButton from "@/components/dashboard/blogs/paginate-btn";
-import { loadMoreComments } from "@/actions/tag";
 
 interface BlogCommentsProps {
   title: string;

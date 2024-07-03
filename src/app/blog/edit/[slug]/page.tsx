@@ -1,14 +1,33 @@
-import CreateNewBlog from "@/components/blog/create-new-blog";
 import prisma from "@/db/db";
-import { getSessionUser } from "@/lib/utils";
+import { cache } from "react";
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { getSessionUser } from "@/lib/utils";
+import { notFound, redirect } from "next/navigation";
 
-export const generateMetadata = (): Metadata => {
+import CreateNewBlog from "@/components/blog/create-new-blog";
+
+interface EditBlogPageProps {
+  params: {
+    slug: string;
+  };
+}
+
+const getBlog = cache(async (slug: string) => {
+  const blog = await prisma.blogPosts.findUnique({
+    where: { slug },
+  });
+  if (!blog) notFound();
+  return blog;
+});
+
+export const generateMetadata = async ({
+  params: { slug },
+}: EditBlogPageProps): Promise<Metadata> => {
+  const blog = await getBlog(slug);
+
   return {
-    title: "Edit Blog Post",
-    description:
-      "Edit your blog post with an interactive editor with images and captions or lists or code snippets and many more..! Add tags and publish your blog post.",
+    title: `Edit - ${blog.title}}`,
+    description: `${blog.description}}`,
   };
 };
 
@@ -25,24 +44,12 @@ export const generateStaticParams = async () => {
   return blogPosts.map(({ slug }) => ({ slug }));
 };
 
-interface EditBlogPageProps {
-  params: {
-    slug: string;
-  };
-}
-
 const EditBlogPage = async ({ params: { slug } }: EditBlogPageProps) => {
   const sessionUserPrommise = getSessionUser();
 
-  const blogPromise = prisma.blogPosts.findUnique({
-    where: {
-      slug,
-    },
-  });
-
   const [sessionUser, blog] = await Promise.all([
     sessionUserPrommise,
-    blogPromise,
+    getBlog(slug),
   ]);
   if (!sessionUser) redirect("/login");
 

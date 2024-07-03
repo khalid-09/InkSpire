@@ -1,8 +1,14 @@
 import prisma from "@/db/db";
+import { Metadata } from "next";
 import { getSessionUser } from "@/lib/utils";
 import { notFound, redirect } from "next/navigation";
 
 import EditProfileForm from "@/components/settings/edit-profile-form";
+
+export const metadata: Metadata = {
+  title: "Edit Profile",
+  description: "Edit your profile here",
+};
 
 const EditProfilePage = async () => {
   const sessionUser = await getSessionUser();

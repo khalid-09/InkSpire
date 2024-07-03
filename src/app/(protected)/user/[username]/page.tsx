@@ -1,7 +1,7 @@
 import prisma from "@/db/db";
 import { Metadata } from "next";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { Suspense, cache } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
@@ -14,7 +14,6 @@ import { cn, convertDate, getSessionUser } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { BLOGS_PER_PAGE } from "@/lib/constants";
 import { loadMoreBlogs } from "@/actions/tag";
-import FormSubmitButton from "@/components/form-submit-button";
 import SocialIcons from "@/components/user/social-icons";
 import PaginateButton from "@/components/dashboard/blogs/paginate-btn";
 

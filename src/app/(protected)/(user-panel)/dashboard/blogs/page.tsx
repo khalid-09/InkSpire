@@ -13,11 +13,9 @@ import { H4 } from "@/components/typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BLOGS_PER_PAGE } from "@/lib/constants";
 
-export const generateMetadata = (): Metadata => {
-  return {
-    title: "Dashboard - Blogs",
-    description: "Manage your blogs here",
-  };
+export const metadata: Metadata = {
+  title: "Dashboard - Blogs",
+  description: "Manage your blogs here",
 };
 
 interface DashboardBlogPageProps {
