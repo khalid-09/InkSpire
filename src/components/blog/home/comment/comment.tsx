@@ -1,19 +1,19 @@
 "use client";
 
-import { deleteComment } from "@/actions/comments";
-import { Comments } from "@prisma/client";
+import { useState } from "react";
+import { User } from "next-auth";
 import { convertDate } from "@/lib/utils";
+import { Comments } from "@prisma/client";
+import { deleteComment } from "@/actions/comments";
 
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 
+import CommentForm from "./comment-form";
 import DeleteCommentButton from "./delete-comment-btn";
 
 import { Button } from "@/components/ui/button";
 import { MessageSquareMore } from "lucide-react";
-import { useState } from "react";
-import CommentForm from "./comment-form";
-import { User } from "next-auth";
 
 interface CommentUser {
   user: {
@@ -37,9 +37,7 @@ const Comment = ({ comment, sessionUser }: CommentProps) => {
 
   const handleReply = () => setShowReplyForm((prev) => !prev);
 
-  const handleShowReply = () => {
-    setShowReplies((prev) => !prev);
-  };
+  const handleShowReply = () => setShowReplies((prev) => !prev);
 
   const { user, createdAt, content, userId, id, blogPostId, replies } = comment;
 
@@ -67,13 +65,20 @@ const Comment = ({ comment, sessionUser }: CommentProps) => {
       </div>
       <div className="flex flex-wrap items-center justify-between">
         <div className="flex items-center gap-1">
-          <div
-            onClick={handleShowReply}
-            className="flex cursor-pointer items-center gap-1 text-sm text-muted-foreground"
-          >
-            <MessageSquareMore />
-            {!showReplies ? `${replies?.length} Reply` : "Hide"}
-          </div>
+          {replies && replies.length > 0 ? (
+            <div
+              onClick={handleShowReply}
+              className="flex cursor-pointer items-center gap-1 text-sm text-muted-foreground"
+            >
+              <MessageSquareMore className="h-4 w-4" />
+              {showReplies ? "Hide" : `${replies.length} Replies`}
+            </div>
+          ) : (
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <MessageSquareMore className="h-4 w-4" />
+              {`${replies?.length ?? 0} Replies`}
+            </div>
+          )}
           <Button variant="link" onClick={handleReply}>
             {showReplyForm ? "Close" : "Reply"}
           </Button>

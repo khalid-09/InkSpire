@@ -178,7 +178,7 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
         </div>
       </article>
       {similarBlogs.length > 0 && (
-        <>
+        <div className="py-4">
           <H2 className="mb-2 mt-0">Similar Blogs</H2>
           <div className="mb-10 space-y-4 divide-y-2">
             <Suspense
@@ -191,7 +191,7 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
               ))}
             </Suspense>
           </div>
-        </>
+        </div>
       )}
     </>
   );
