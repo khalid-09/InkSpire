@@ -19,6 +19,9 @@ interface BlogPageProps {
   params: {
     slug: string;
   };
+  searchParams: {
+    page?: string;
+  };
 }
 
 export const generateStaticParams = async () => {
@@ -62,7 +65,10 @@ export const generateMetadata = async ({
   };
 };
 
-const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
+const BlogPage = async ({
+  params: { slug },
+  searchParams: { page },
+}: BlogPageProps) => {
   const blog = await getBlog(slug);
 
   const {
@@ -166,7 +172,7 @@ const BlogPage = async ({ params: { slug } }: BlogPageProps) => {
             totalLikes={totalLikes}
             comments={totalComments}
           >
-            <BlogComments title={title} blogId={id} />
+            <BlogComments slug={slug} page={page} title={title} blogId={id} />
           </BlogActivity>
           <NewEditor readOnly={true} data={content} />
         </div>

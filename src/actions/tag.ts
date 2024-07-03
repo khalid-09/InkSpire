@@ -22,3 +22,10 @@ export const loadMoreBlogsInDashboard = (formData: FormData) => {
 
   redirect(`/dashboard/blogs?page=${page.toString()}`);
 };
+
+export const loadMoreComments = (slug: string, formData: FormData) => {
+  const page = formData.get("page");
+  if (!page) throw new Error("Page is required");
+
+  redirect(`/blog/${slug}?page=${page.toString()}`);
+};
