@@ -50,14 +50,14 @@ Ensure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/khalid-09/nexbuy.git
+   git clone https://github.com/khalid-09/InkSpire.git
 
    ```
 
 2. Navigate to the project directory:
 
    ```bash
-   cd nexbuy
+   cd InkSpire
 
    ```
 
