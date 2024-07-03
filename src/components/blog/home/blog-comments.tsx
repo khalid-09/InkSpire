@@ -17,6 +17,14 @@ import {
 import { P } from "@/components/typography";
 import { Button } from "@/components/ui/button";
 import { MessageCircleMore } from "lucide-react";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 interface BlogCommentsProps {
   title: string;
@@ -85,7 +93,7 @@ const BlogComments = async ({
 
   return (
     <>
-      <div className="w-full">
+      <div className="hidden w-full md:block">
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon">
@@ -126,6 +134,48 @@ const BlogComments = async ({
             </div>
           </SheetContent>
         </Sheet>
+      </div>
+      <div className="block md:hidden">
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button variant="outline" size="icon">
+              <MessageCircleMore className="h-5 w-5" />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className="px-3 pb-3">
+            <DrawerHeader>
+              <DrawerTitle>Comments</DrawerTitle>
+              <DrawerDescription>{title}</DrawerDescription>
+            </DrawerHeader>
+            <CommentForm blogId={blogId} />
+            {comments.map((comment) => (
+              <Comment
+                key={comment.id}
+                sessionUser={sessionUser}
+                comment={comment}
+              />
+            ))}
+            {comments.length === 0 && <P>No comments 👻.</P>}
+            <div className="mt-4">
+              {hasMoreComments && (
+                <PaginateButton
+                  action={loadMoreCommentsForBlog}
+                  value={currentPage + 1}
+                >
+                  Show More
+                </PaginateButton>
+              )}
+              {currentPage > 1 && comments.length > 0 && (
+                <PaginateButton
+                  action={loadMoreCommentsForBlog}
+                  value={currentPage - 1}
+                >
+                  Show Less
+                </PaginateButton>
+              )}
+            </div>
+          </DrawerContent>
+        </Drawer>
       </div>
     </>
   );
