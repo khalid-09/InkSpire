@@ -1,5 +1,4 @@
 import prisma from "@/db/db";
-import { Comments } from "@prisma/client";
 import { getSessionUser } from "@/lib/utils";
 
 import Comment from "./comment/comment";
@@ -47,7 +46,7 @@ const BlogComments = async ({ title, blogId }: BlogCommentsProps) => {
       },
     },
     orderBy: {
-      createdAt: "desc",
+      id: "desc",
     },
   });
 

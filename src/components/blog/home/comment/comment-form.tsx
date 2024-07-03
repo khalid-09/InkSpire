@@ -84,10 +84,12 @@ const CommentForm = ({
             </FormItem>
           )}
         />
-        <Button type="submit" className="mt-4">
-          {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {reply ? "Reply" : "Comment"}
-        </Button>
+        <div className="flex justify-end">
+          <Button type="submit" className="mt-4">
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {reply ? "Reply" : "Comment"}
+          </Button>
+        </div>
       </form>
     </Form>
   );

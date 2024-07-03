@@ -64,6 +64,9 @@ const deleteCommentsRecursive = async (id: string) => {
 export const deleteComment = async (formData: FormData) => {
   const commentId = formData.get("commentId") as string;
 
+  const sessionUser = await getSessionUser();
+  if (!sessionUser) throw new Error("Login to Delete a Comment!");
+
   const comment = await prisma.comments.findUnique({
     where: { id: commentId },
   });

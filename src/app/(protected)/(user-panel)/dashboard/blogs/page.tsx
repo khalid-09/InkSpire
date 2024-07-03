@@ -52,7 +52,6 @@ const DashboardBlogPage = async ({
     },
     include: {
       activity: true,
-      comments: true,
     },
     skip,
     take: BLOGS_PER_PAGE,

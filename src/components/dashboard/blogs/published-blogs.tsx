@@ -11,12 +11,8 @@ type activity = {
   activity: Activity[];
 };
 
-type comments = {
-  comments: Comments[];
-};
-
 interface PublishedBlogsProps {
-  blog: BlogPosts & activity & comments;
+  blog: BlogPosts & activity;
 }
 
 const PublishedBlogs = ({
@@ -28,7 +24,6 @@ const PublishedBlogs = ({
     authorId,
     slug,
     activity: [{ id: activityId, totalComments, totalLikes, totalReads }],
-    comments,
   },
 }: PublishedBlogsProps) => {
   return (

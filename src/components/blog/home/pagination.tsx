@@ -39,9 +39,6 @@ const Pagination = ({
           <span>Previous Page</span>
         </Link>
       </Button>
-      <span className="font-semibold">
-        Page {currentPage} of {totalPages}
-      </span>
       <Button asChild>
         <Link
           href={generatePageLink(currentPage + 1)}
