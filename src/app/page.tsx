@@ -2,18 +2,17 @@ import prisma from "@/db/db";
 import { Prisma } from "@prisma/client";
 import { BlogFilterSchema } from "@/lib/validation/blog-filter";
 import { Suspense } from "react";
-
 import ReadTrendingBlogs from "@/components/blog/home/read-trending-blogs";
 import ReadBlog from "@/components/blog/home/read-blog";
 import HomeBlogSkeleton from "@/components/blog/home/home-blog-skeleton";
 import TagSearch from "@/components/blog/home/tag-search";
 import UserSearchResults from "@/components/blog/home/user-search-results";
 import Pagination from "@/components/blog/home/pagination";
-
-import { H1, H3, P } from "@/components/typography";
+import { H1, H3 } from "@/components/typography";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TrendingUp, User } from "lucide-react";
 import { BLOGS_PER_PAGE } from "@/lib/constants";
+import LoadingSpinner from "@/components/loading-spinner";
 
 interface HomePageProps {
   searchParams: {
@@ -99,56 +98,52 @@ const HomePage = async ({
     <>
       <section className="mb-10 mt-5 flex flex-col-reverse items-start gap-10 md:flex-row">
         <div className="w-full md:w-2/3">
-          <Tabs defaultValue="home">
-            <TabsList className="flex-wrap">
-              <TabsTrigger value="home">
-                {query && !users.length
-                  ? 'Search results for "' + query + '"'
-                  : tag
-                    ? tag
-                    : "Recently Published"}
-              </TabsTrigger>
-              <TabsTrigger className="block  md:hidden" value="trending">
-                Trending Blogs
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent className="space-y-10" value="home">
-              <div className="space-y-4 divide-y-2">
-                <Suspense
-                  fallback={Array.from({ length: 5 }).map((_, i) => (
-                    <HomeBlogSkeleton key={i} />
-                  ))}
-                >
+          <Suspense fallback={<LoadingSpinner />}>
+            <Tabs defaultValue="home">
+              <TabsList className="flex-wrap">
+                <TabsTrigger value="home">
+                  {query && !users.length
+                    ? 'Search results for "' + query + '"'
+                    : tag
+                      ? tag
+                      : "Recently Published"}
+                </TabsTrigger>
+                <TabsTrigger className="block md:hidden" value="trending">
+                  Trending Blogs
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent className="space-y-10" value="home">
+                <div className="space-y-4 divide-y-2">
                   {blogs.map((blog) => (
                     <ReadBlog type="home" key={blog.id} blog={blog} />
                   ))}
-                </Suspense>
-              </div>
-              {blogs.length === 0 && (
-                <div>
-                  <H1 className="mt-10">
-                    No Blogs Found ;)
-                    <br /> Start writing some 🙂
-                  </H1>
                 </div>
-              )}
-              {blogs.length > 0 && (
-                <Pagination
-                  currentPage={pageNumber}
-                  totalPages={Math.ceil(totalBlogs / BLOGS_PER_PAGE)}
-                  filterValues={filterValues}
-                />
-              )}
-            </TabsContent>
-            <TabsContent value="trending">
-              <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
-              {trendingBlogs.length === 0 && (
-                <div>
-                  <H1 className="mt-10">No blogs trending !🙂</H1>
-                </div>
-              )}
-            </TabsContent>
-          </Tabs>
+                {blogs.length === 0 && (
+                  <div>
+                    <H1 className="mt-10">
+                      No Blogs Found ;)
+                      <br /> Start writing some 🙂
+                    </H1>
+                  </div>
+                )}
+                {blogs.length > 0 && (
+                  <Pagination
+                    currentPage={pageNumber}
+                    totalPages={Math.ceil(totalBlogs / BLOGS_PER_PAGE)}
+                    filterValues={filterValues}
+                  />
+                )}
+              </TabsContent>
+              <TabsContent value="trending">
+                <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
+                {trendingBlogs.length === 0 && (
+                  <div>
+                    <H1 className="mt-10">No blogs trending !🙂</H1>
+                  </div>
+                )}
+              </TabsContent>
+            </Tabs>
+          </Suspense>
         </div>
         {!users.length ? (
           <aside className="w-full space-y-6 md:w-1/3">
@@ -163,7 +158,9 @@ const HomePage = async ({
                 <span className="font-semibold">Trending </span>
                 <TrendingUp />
               </H3>
-              <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
+              <Suspense fallback={<LoadingSpinner />}>
+                <ReadTrendingBlogs trendingBlogs={trendingBlogs} />
+              </Suspense>
               {trendingBlogs.length === 0 && (
                 <div>
                   <H1 className="mt-10">No blogs trending !🙂</H1>
@@ -177,9 +174,11 @@ const HomePage = async ({
               <span>Users related to search</span>{" "}
               <User className="text-muted-foreground" />
             </H3>
-            {users.map((user) => (
-              <UserSearchResults key={user.username} user={user} />
-            ))}
+            <Suspense fallback={<LoadingSpinner />}>
+              {users.map((user) => (
+                <UserSearchResults key={user.username} user={user} />
+              ))}
+            </Suspense>
           </aside>
         )}
       </section>
