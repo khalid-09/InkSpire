@@ -32,14 +32,14 @@ interface CommentProps {
 }
 
 const Comment = ({ comment, sessionUser }: CommentProps) => {
+  const { user, createdAt, content, userId, id, blogPostId, replies } = comment;
+
   const [showReplyForm, setShowReplyForm] = useState(false);
   const [showReplies, setShowReplies] = useState(false);
 
   const handleReply = () => setShowReplyForm((prev) => !prev);
 
   const handleShowReply = () => setShowReplies((prev) => !prev);
-
-  const { user, createdAt, content, userId, id, blogPostId, replies } = comment;
 
   return (
     <div className="mt-4 space-y-2">

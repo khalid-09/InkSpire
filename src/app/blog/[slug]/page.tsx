@@ -172,7 +172,7 @@ const BlogPage = async ({
             totalLikes={totalLikes}
             comments={totalComments}
           >
-            <BlogComments slug={slug} page={page} title={title} blogId={id} />
+            <BlogComments title={title} blogId={id} />
           </BlogActivity>
           <NewEditor readOnly={true} data={content} />
         </div>
