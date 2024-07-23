@@ -4,8 +4,7 @@ import { twMerge } from "tailwind-merge";
 import { nanoid } from "nanoid";
 import { auth } from "@/auth";
 import { format } from "date-fns";
-import { User } from "next-auth";
-import { notFound } from "next/navigation";
+import { cache } from "react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -20,11 +19,11 @@ export const generateUsername = async (email: string) => {
   return username;
 };
 
-export const getSessionUser = async () => {
+export const getSessionUser = cache(async () => {
   const session = await auth();
   const user = session?.user;
   return user;
-};
+});
 
 export const convertDate = (
   dateString: Date,
