@@ -79,7 +79,7 @@ const Breadcrumbs = ({ showChangePassword }: BreadcrumbsProps) => {
                           href={
                             userNavSubPathname === "edit-profile"
                               ? "/settings/change-password"
-                              : "/dashboard/edit-profile"
+                              : "/settings/edit-profile"
                           }
                         >
                           {userNavSubPathname === "edit-profile"
