@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "./api/uploadthing/core";
+import ToasterProvider from "@/components/toaster-provider";
 
 const montserrat = Montserrat({ subsets: ["latin"] });
 
@@ -38,7 +39,7 @@ export default function RootLayout({
           <HeaderNav />
           <main className="mx-auto max-w-6xl px-4">{children}</main>
         </ThemeProvider>
-        <Toaster position="bottom-center" />
+        <ToasterProvider />
       </body>
     </html>
   );
