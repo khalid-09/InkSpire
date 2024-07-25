@@ -1,19 +1,16 @@
-import { Suspense } from "react";
-import TrendingBlogSkeleton from "./trending-blog-skeleton";
+import { H1 } from "@/components/typography";
 import ReadBlog from "./read-blog";
-import { BlogPosts } from "@prisma/client";
+import prisma from "@/db/db";
 
-interface ReadTrendingBlogsProps {
-  trendingBlogs: { blogPost: BlogPosts | null }[];
-}
+const ReadTrendingBlogs = async () => {
+  const trendingBlogs = await prisma.activity.findMany({
+    orderBy: [{ totalLikes: "desc" }, { totalReads: "desc" }],
+    select: { blogPost: true },
+    take: 5,
+  });
 
-const ReadTrendingBlogs = ({ trendingBlogs }: ReadTrendingBlogsProps) => {
   return (
-    <Suspense
-      fallback={Array.from({ length: 5 }).map((_, i) => (
-        <TrendingBlogSkeleton key={i} index={i} />
-      ))}
-    >
+    <>
       {trendingBlogs.map(({ blogPost }, i) => (
         <ReadBlog
           index={i}
@@ -22,7 +19,12 @@ const ReadTrendingBlogs = ({ trendingBlogs }: ReadTrendingBlogsProps) => {
           blog={blogPost!}
         />
       ))}
-    </Suspense>
+      {trendingBlogs.length === 0 && (
+        <div>
+          <H1 className="mt-10">No blogs trending !🙂</H1>
+        </div>
+      )}
+    </>
   );
 };
 
